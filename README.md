@@ -12,7 +12,7 @@
 
 **[🚀 Live Demo](https://ai-tutor-platform-lime.vercel.app) | [📹 Watch Demo](https://drive.google.com/file/d/1IkBTUbwiS8_BEgk9LE-TaYAeGrobxU16/view?usp=drive_link) | [📖 View Documentation](https://docs.google.com/presentation/d/1E6upFTihTMPBInp__Kyj6AOPpAJpGmfC/edit?usp=drive_link&ouid=100286719899966317244&rtpof=true&sd=true)**
 
-![YoLearn.ai Banner](https://drive.google.com/uc?export=view&id=1meN3Wv7yG99ylSxIAbNqzSgETPJBbOu0)
+![YoLearn.ai Banner](https://drive.google.com/file/d/1Uw83ueSPw1GOgHi4jxv8ARtM4cJMy1Gp/view?usp=drive_link)
 
 </div>
 
@@ -176,7 +176,7 @@ http://localhost:5500
 ## 📸 Screenshots
 
 ### 🏠 Dashboard - Choose Your AI Tutor
-<img src="https://drive.google.com/uc?export=view&id=1meN3Wv7yG99ylSxIAbNqzSgETPJBbOu0" alt="Dashboard" width="800"/>
+<img src="https://drive.google.com/file/d/1Uw83ueSPw1GOgHi4jxv8ARtM4cJMy1Gp/view?usp=drive_link" alt="Dashboard" width="800"/>
 
 *Select between Alex (Science & Math) or Sophia (Arts & Humanities)*
 
