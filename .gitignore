@@ -1,0 +1,27 @@
+# Node modules
+node_modules/
+backend/node_modules/
+
+# Environment variables
+.env
+backend/.env
+
+# API Keys (DO NOT COMMIT!)
+config.js
+backend/config/config.js
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build files
+dist/
+build/

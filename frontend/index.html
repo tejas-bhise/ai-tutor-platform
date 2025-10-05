@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YoLearn.ai - Your Personal AI Learning Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/styles.css">
+</head>
+<body>
+    
+    <!-- Home Screen -->
+    <div id="home-screen" class="min-h-screen animated-bg flex flex-col items-center justify-center p-8">
+        <!-- Particles -->
+        <div class="particles-container fixed inset-0 pointer-events-none"></div>
+        
+        <div class="text-center mb-12 z-10">
+            <h1 class="text-6xl font-bold text-white mb-4 animate-pulse">✨ YoLearn.ai ✨</h1>
+            <p class="text-2xl text-white/90 mb-2">Your Personal AI Learning Companion</p>
+            <p class="text-lg text-white/70">Powered by Advanced AI • 100% Free • 24/7 Available</p>
+        </div>
+        
+        <div id="tutors-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl z-10">
+            <!-- Tutors will be loaded dynamically -->
+        </div>
+
+        <div id="loading" class="hidden text-white text-xl">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white mx-auto mb-4"></div>
+            Loading tutors...
+        </div>
+
+        <div id="error-message" class="hidden text-red-400 text-center mt-8 bg-red-900/30 p-6 rounded-xl max-w-2xl">
+            <p class="text-xl font-bold mb-2">⚠️ Connection Error</p>
+            <p id="error-text"></p>
+        </div>
+    </div>
+
+    <script src="./assets/js/api.js"></script>
+    <script src="./assets/js/ui.js"></script>
+    <script src="./assets/js/app.js"></script>
+</body>
+</html>

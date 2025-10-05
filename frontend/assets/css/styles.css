@@ -1,0 +1,1192 @@
+/* ============================================
+   YoLearn.ai - Complete Styling - FIXED VERSION
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.min-h-screen {
+    min-height: 100vh;
+}
+
+.fixed {
+    position: fixed;
+}
+
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.inset-0 {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.z-10 {
+    z-index: 10;
+}
+
+.z-20 {
+    z-index: 20;
+}
+
+.pointer-events-none {
+    pointer-events: none;
+}
+
+/* ============================================
+   Animated Background & Particles
+   ============================================ */
+
+.animated-bg {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.animated-bg::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-50%) translateY(-50%) rotate(0deg);
+    }
+    100% {
+        transform: translateX(-50%) translateY(-50%) rotate(360deg);
+    }
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    animation: float 6s infinite ease-in-out;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) translateX(50px);
+    }
+}
+
+/* ============================================
+   Glassmorphism
+   ============================================ */
+
+.glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   Typography & Text Styles
+   ============================================ */
+
+.text-6xl {
+    font-size: 3.75rem;
+    line-height: 1;
+}
+
+.text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+}
+
+.text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+}
+
+.text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+}
+
+.text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.text-white {
+    color: #ffffff;
+}
+
+.text-gray-400 {
+    color: #9ca3af;
+}
+
+.text-gray-300 {
+    color: #d1d5db;
+}
+
+/* ============================================
+   Grid & Layout
+   ============================================ */
+
+.grid {
+    display: grid;
+}
+
+.grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
+.gap-3 {
+    gap: 0.75rem;
+}
+
+.gap-4 {
+    gap: 1rem;
+}
+
+.gap-6 {
+    gap: 1.5rem;
+}
+
+.gap-8 {
+    gap: 2rem;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.flex-1 {
+    flex: 1 1 0%;
+}
+
+/* ============================================
+   Spacing
+   ============================================ */
+
+.p-2 {
+    padding: 0.5rem;
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+.p-6 {
+    padding: 1.5rem;
+}
+
+.p-8 {
+    padding: 2rem;
+}
+
+.px-3 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.px-8 {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.py-1 {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+.py-2 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.py-8 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.mb-6 {
+    margin-bottom: 1.5rem;
+}
+
+.mb-8 {
+    margin-bottom: 2rem;
+}
+
+.mb-12 {
+    margin-bottom: 3rem;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+.mt-3 {
+    margin-top: 0.75rem;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}
+
+.mt-8 {
+    margin-top: 2rem;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ============================================
+   Borders & Rounded Corners
+   ============================================ */
+
+.rounded-full {
+    border-radius: 9999px;
+}
+
+.rounded-xl {
+    border-radius: 0.75rem;
+}
+
+.rounded-2xl {
+    border-radius: 1rem;
+}
+
+.rounded-3xl {
+    border-radius: 1.5rem;
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.border-2 {
+    border-width: 2px;
+}
+
+.border-t {
+    border-top-width: 1px;
+}
+
+.border-b {
+    border-bottom-width: 1px;
+}
+
+.border-gray-700 {
+    border-color: #374151;
+}
+
+.border-white\/20 {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   Colors & Backgrounds
+   ============================================ */
+
+.bg-gray-900 {
+    background-color: #111827;
+}
+
+.bg-gray-800 {
+    background-color: #1f2937;
+}
+
+.bg-gray-800\/95 {
+    background-color: rgba(31, 41, 55, 0.95);
+}
+
+.bg-gray-700 {
+    background-color: #374151;
+}
+
+.bg-red-500 {
+    background-color: #ef4444;
+}
+
+.bg-red-600 {
+    background-color: #dc2626;
+}
+
+.bg-green-500\/30 {
+    background-color: rgba(34, 197, 94, 0.3);
+}
+
+.bg-blue-500\/30 {
+    background-color: rgba(59, 130, 246, 0.3);
+}
+
+.bg-pink-500\/30 {
+    background-color: rgba(236, 72, 153, 0.3);
+}
+
+.bg-yellow-500\/30 {
+    background-color: rgba(234, 179, 8, 0.3);
+}
+
+.bg-purple-500\/30 {
+    background-color: rgba(168, 85, 247, 0.3);
+}
+
+.text-red-400 {
+    color: #f87171;
+}
+
+.text-blue-400 {
+    color: #60a5fa;
+}
+
+.text-blue-300 {
+    color: #93c5fd;
+}
+
+.text-pink-400 {
+    color: #f472b6;
+}
+
+.text-yellow-200 {
+    color: #fef08a;
+}
+
+.text-gray-500 {
+    color: #6b7280;
+}
+
+/* ============================================
+   Sizing
+   ============================================ */
+
+.w-full {
+    width: 100%;
+}
+
+.w-3 {
+    width: 0.75rem;
+}
+
+.w-5 {
+    width: 1.25rem;
+}
+
+.w-6 {
+    width: 1.5rem;
+}
+
+.w-12 {
+    width: 3rem;
+}
+
+.w-16 {
+    width: 4rem;
+}
+
+.w-32 {
+    width: 8rem;
+}
+
+.w-48 {
+    width: 12rem;
+}
+
+.w-64 {
+    width: 16rem;
+}
+
+.h-3 {
+    height: 0.75rem;
+}
+
+.h-5 {
+    height: 1.25rem;
+}
+
+.h-6 {
+    height: 1.5rem;
+}
+
+.h-12 {
+    height: 3rem;
+}
+
+.h-16 {
+    height: 4rem;
+}
+
+.h-32 {
+    height: 8rem;
+}
+
+.h-48 {
+    height: 12rem;
+}
+
+.h-full {
+    height: 100%;
+}
+
+.max-w-2xl {
+    max-width: 42rem;
+}
+
+.max-w-4xl {
+    max-width: 56rem;
+}
+
+.max-w-lg {
+    max-width: 32rem;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   Tutor Cards
+   ============================================ */
+
+.tutor-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    transform: scale(1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.tutor-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.tutor-emoji {
+    width: 8rem;
+    height: 8rem;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.tutor-card.alex .tutor-emoji {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+}
+
+.tutor-card.sophia .tutor-emoji {
+    background: linear-gradient(135deg, #ec4899 0%, #9333ea 100%);
+}
+
+.subject-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    margin: 0.25rem;
+}
+
+.start-btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.start-btn.alex {
+    background: linear-gradient(to right, #3b82f6, #1d4ed8);
+    color: white;
+}
+
+.start-btn.sophia {
+    background: linear-gradient(to right, #ec4899, #9333ea);
+    color: white;
+}
+
+.start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   Stats Cards (Hidden)
+   ============================================ */
+
+.stats-card {
+    display: none;
+}
+
+/* ============================================
+   FIXED WORKING 3D AVATAR
+   ============================================ */
+
+.avatar-3d-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    perspective: 1000px;
+    z-index: 1;
+}
+
+.avatar-wrapper {
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+}
+
+.modern-avatar {
+    width: 300px;
+    height: 450px;
+    position: relative;
+}
+
+/* Hair */
+.avatar-hair {
+    position: absolute;
+    width: 160px;
+    height: 100px;
+    background: linear-gradient(135deg, #2c1810 0%, #4a2c22 100%);
+    border-radius: 80px 80px 40px 40px;
+    top: 80px;
+    left: 70px;
+    z-index: 2;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Head */
+.avatar-head {
+    position: absolute;
+    width: 150px;
+    height: 180px;
+    background: linear-gradient(145deg, #ffd6a5 0%, #fdab76 100%);
+    border-radius: 75px 75px 60px 60px;
+    top: 100px;
+    left: 75px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    animation: headBob 3s ease-in-out infinite;
+}
+
+@keyframes headBob {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(-2deg);
+    }
+}
+
+/* Eyes */
+.avatar-eyes {
+    position: absolute;
+    width: 100%;
+    top: 60px;
+    display: flex;
+    justify-content: space-around;
+    padding: 0 30px;
+}
+
+.eye {
+    width: 30px;
+    height: 30px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    animation: blink 5s infinite;
+}
+
+.eye::before {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+    border-radius: 50%;
+    top: 7px;
+    left: 7px;
+    animation: eyeMove 4s infinite ease-in-out;
+}
+
+.eye::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    top: 9px;
+    left: 12px;
+    opacity: 0.8;
+}
+
+@keyframes blink {
+    0%, 96%, 100% {
+        transform: scaleY(1);
+    }
+    98% {
+        transform: scaleY(0.1);
+    }
+}
+
+@keyframes eyeMove {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+    25% {
+        transform: translate(2px, -2px);
+    }
+    50% {
+        transform: translate(-2px, 0);
+    }
+    75% {
+        transform: translate(0, 2px);
+    }
+}
+
+/* Mouth */
+.avatar-mouth {
+    position: absolute;
+    width: 50px;
+    height: 20px;
+    border: 3px solid #d97070;
+    border-top: none;
+    border-radius: 0 0 40px 40px;
+    top: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, #ff9999 0%, #ff6b6b 100%);
+    transition: all 0.3s ease;
+}
+
+.avatar-mouth.speaking {
+    animation: mouthSpeak 0.3s infinite alternate;
+}
+
+@keyframes mouthSpeak {
+    0% {
+        height: 20px;
+    }
+    100% {
+        height: 35px;
+        transform: translateX(-50%) scaleX(1.1);
+    }
+}
+
+/* Body */
+.avatar-body {
+    position: absolute;
+    width: 180px;
+    height: 150px;
+    background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+    border-radius: 90px 90px 20px 20px;
+    top: 270px;
+    left: 60px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Arms */
+.avatar-arms {
+    position: absolute;
+    width: 100%;
+    top: 280px;
+}
+
+.arm {
+    position: absolute;
+    width: 50px;
+    height: 140px;
+    background: linear-gradient(145deg, #ffd6a5 0%, #fdab76 100%);
+    border-radius: 25px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.arm-left {
+    left: 20px;
+    transform-origin: top center;
+    animation: waveLeft 3s ease-in-out infinite;
+}
+
+.arm-right {
+    right: 20px;
+    transform-origin: top center;
+    animation: waveRight 3s ease-in-out infinite 1.5s;
+}
+
+@keyframes waveLeft {
+    0%, 100% {
+        transform: rotate(-20deg);
+    }
+    50% {
+        transform: rotate(-40deg);
+    }
+}
+
+@keyframes waveRight {
+    0%, 100% {
+        transform: rotate(20deg);
+    }
+    50% {
+        transform: rotate(40deg);
+    }
+}
+
+/* Speaking animation */
+.avatar-wrapper.speaking .arm-left {
+    animation: speakGestureLeft 0.8s ease-in-out infinite;
+}
+
+.avatar-wrapper.speaking .arm-right {
+    animation: speakGestureRight 0.8s ease-in-out infinite 0.4s;
+}
+
+@keyframes speakGestureLeft {
+    0%, 100% {
+        transform: rotate(-15deg);
+    }
+    50% {
+        transform: rotate(-35deg) translateY(-10px);
+    }
+}
+
+@keyframes speakGestureRight {
+    0%, 100% {
+        transform: rotate(15deg);
+    }
+    50% {
+        transform: rotate(35deg) translateY(-10px);
+    }
+}
+
+/* ============================================
+   Chat Messages
+   ============================================ */
+
+.message-bubble {
+    max-width: 32rem;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    word-wrap: break-word;
+}
+
+.message-bubble.user {
+    background: linear-gradient(to right, #a855f7, #ec4899);
+    color: white;
+}
+
+.message-bubble.tutor {
+    background: #374151;
+    color: white;
+}
+
+.message-bubble.system {
+    background: rgba(234, 179, 8, 0.2);
+    border: 1px solid rgba(234, 179, 8, 0.5);
+    color: #fef08a;
+    font-size: 0.875rem;
+}
+
+.message-bubble a {
+    color: #60a5fa;
+    text-decoration: underline;
+}
+
+.message-bubble a:hover {
+    color: #93c5fd;
+}
+
+.youtube-embed {
+    margin-top: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.code-block {
+    background: #1e1e1e;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    overflow-x: auto;
+}
+
+.typing-indicator {
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+}
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    background: #94a3b8;
+    border-radius: 50%;
+    animation: typingAnimation 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typingAnimation {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-10px);
+    }
+}
+
+/* ============================================
+   Buttons & Controls
+   ============================================ */
+
+.reaction-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.5rem;
+}
+
+.reaction-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+button {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+input[type="text"] {
+    outline: none;
+}
+
+input[type="text"]:focus {
+    outline: 2px solid #a855f7;
+    outline-offset: 2px;
+}
+
+/* ============================================
+   Achievement Popup
+   ============================================ */
+
+.achievement-popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (min-width: 768px) {
+    .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .lg\:flex-row {
+        flex-direction: row;
+    }
+
+    .lg\:w-2\/5 {
+        width: 40%;
+    }
+
+    .lg\:h-full {
+        height: 100%;
+    }
+}
+
+/* ============================================
+   Utility Additions
+   ============================================ */
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.overflow-y-auto {
+    overflow-y: auto;
+}
+
+.overflow-x-auto {
+    overflow-x: auto;
+}
+
+.backdrop-blur-xl {
+    backdrop-filter: blur(24px);
+}
+
+.shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+.object-cover {
+    object-fit: cover;
+}
+
+.transform {
+    transform: translateZ(0);
+}
+
+.-scale-x-100 {
+    transform: scaleX(-1);
+}
+
+.-translate-x-1\/2 {
+    transform: translateX(-50%);
+}
+
+.top-0 { top: 0; }
+.top-24 { top: 6rem; }
+.bottom-6 { bottom: 1.5rem; }
+.bottom-24 { bottom: 6rem; }
+.left-0 { left: 0; }
+.left-6 { left: 1.5rem; }
+.left-1\/2 { left: 50%; }
+.right-0 { right: 0; }
+.right-6 { right: 1.5rem; }
+
+.bg-gradient-to-b {
+    background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
+}
+
+.bg-gradient-to-br {
+    background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
+.from-black\/50 {
+    --tw-gradient-from: rgba(0, 0, 0, 0.5);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(0, 0, 0, 0));
+}
+
+.to-transparent {
+    --tw-gradient-to: transparent;
+}
+
+.from-gray-900 {
+    --tw-gradient-from: #111827;
+}
+
+.via-purple-900\/20 {
+    --tw-gradient-via: rgba(88, 28, 135, 0.2);
+}
+
+.to-gray-900 {
+    --tw-gradient-to: #111827;
+}
