@@ -1,46 +1,99 @@
 /**
- * Main Application Logic for Home Page
+ * Main Application Logic for Home Page - FIXED VERSION
  */
+
+// Hardcoded tutor data (no backend dependency)
+const tutorsData = [
+    {
+        id: 'alex',
+        name: 'Alex',
+        specialty: 'Math, Science & Technology Expert',
+        emoji: '👨‍🏫',
+        subjects: ['Physics', 'Math', 'Coding']
+    },
+    {
+        id: 'sophia',
+        name: 'Sophia',
+        specialty: 'Arts & Humanities Specialist',
+        emoji: '👩‍🏫',
+        subjects: ['Literature', 'Arts', 'History']
+    }
+];
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async () => {
-    // Create particles
-    UIHelpers.createParticles();
+    console.log('🚀 YoLearn.ai Loading...');
+
+    // Create particles if function exists
+    if (typeof UIHelpers !== 'undefined' && UIHelpers.createParticles) {
+        UIHelpers.createParticles();
+    }
 
     // Load tutors
     await loadTutors();
+
+    // Check backend status (non-blocking)
+    checkBackendConnection();
 });
 
 /**
- * Load tutors from backend
+ * Load tutors (using hardcoded data)
  */
 async function loadTutors() {
     const tutorsGrid = document.getElementById('tutors-grid');
     
-    UIHelpers.showLoading();
-    UIHelpers.hideError();
+    if (!tutorsGrid) {
+        console.log('ℹ️ Tutors grid not found (probably on call.html page)');
+        return;
+    }
+
+    // Show loading if available
+    if (typeof UIHelpers !== 'undefined' && UIHelpers.showLoading) {
+        UIHelpers.showLoading();
+    }
 
     try {
-        // Check backend health first
-        await api.checkHealth();
-
-        // Fetch tutors
-        const response = await api.getTutors();
+        // Display tutors using hardcoded data
+        displayTutors(tutorsData);
+        console.log('✅ Tutors loaded successfully');
         
-        if (!response.success || !response.tutors) {
-            throw new Error('Invalid response from server');
+        // Hide error if any
+        if (typeof UIHelpers !== 'undefined' && UIHelpers.hideError) {
+            UIHelpers.hideError();
         }
-
-        // Display tutors
-        displayTutors(response.tutors);
         
     } catch (error) {
-        console.error('Error loading tutors:', error);
-        UIHelpers.showError(
-            'Unable to connect to the server. Please make sure the backend is running on http://localhost:5000'
-        );
+        console.error('❌ Error loading tutors:', error);
+        
+        if (typeof UIHelpers !== 'undefined' && UIHelpers.showError) {
+            UIHelpers.showError('Error loading tutors. Please refresh the page.');
+        }
     } finally {
-        UIHelpers.hideLoading();
+        // Hide loading
+        if (typeof UIHelpers !== 'undefined' && UIHelpers.hideLoading) {
+            UIHelpers.hideLoading();
+        }
+    }
+}
+
+/**
+ * Check backend connection (non-blocking)
+ */
+async function checkBackendConnection() {
+    if (typeof api === 'undefined') {
+        console.warn('⚠️ API service not loaded');
+        return;
+    }
+
+    try {
+        const health = await api.checkHealth();
+        if (health.success) {
+            console.log('✅ Backend connected and ready!');
+        } else {
+            console.warn('⚠️ Backend connection issue (tutors still work!)');
+        }
+    } catch (error) {
+        console.warn('⚠️ Backend check failed (tutors still work!):', error.message);
     }
 }
 
@@ -49,6 +102,12 @@ async function loadTutors() {
  */
 function displayTutors(tutors) {
     const tutorsGrid = document.getElementById('tutors-grid');
+    
+    if (!tutorsGrid) {
+        console.error('❌ Tutors grid element not found');
+        return;
+    }
+
     tutorsGrid.innerHTML = '';
 
     tutors.forEach(tutor => {
@@ -61,35 +120,35 @@ function displayTutors(tutors) {
             <p class="text-white/80 mb-4">${tutor.specialty}</p>
             <div class="flex gap-2 justify-center mb-4 flex-wrap">
                 ${tutor.subjects.map(subject => 
-                    `<span class="subject-tag bg-${getSubjectColor(subject)}/30">${getSubjectEmoji(subject)} ${subject}</span>`
+                    `<span class="subject-tag" style="background: rgba(${getSubjectColorRGB(subject)}, 0.3); padding: 4px 12px; border-radius: 12px; font-size: 14px;">
+                        ${getSubjectEmoji(subject)} ${subject}
+                    </span>`
                 ).join('')}
             </div>
-            <button class="start-btn ${tutor.id}" data-tutor="${tutor.id}" data-name="${tutor.name}">
+            <button class="start-btn ${tutor.id}" onclick="startCall('${tutor.id}')" style="cursor: pointer;">
                 🚀 Start Learning with ${tutor.name}
             </button>
         `;
 
         tutorsGrid.appendChild(card);
-
-        // Add click event
-        const startBtn = card.querySelector('.start-btn');
-        startBtn.addEventListener('click', () => startCall(tutor));
     });
+
+    console.log('✅ Displayed', tutors.length, 'tutors');
 }
 
 /**
- * Get subject color
+ * Get subject color RGB
  */
-function getSubjectColor(subject) {
+function getSubjectColorRGB(subject) {
     const colors = {
-        'Physics': 'blue-500',
-        'Math': 'green-500',
-        'Coding': 'purple-500',
-        'Literature': 'pink-500',
-        'Arts': 'yellow-500',
-        'History': 'red-500'
+        'Physics': '59, 130, 246',    // blue
+        'Math': '34, 197, 94',         // green
+        'Coding': '168, 85, 247',      // purple
+        'Literature': '236, 72, 153',  // pink
+        'Arts': '251, 191, 36',        // yellow
+        'History': '239, 68, 68'       // red
     };
-    return colors[subject] || 'gray-500';
+    return colors[subject] || '156, 163, 175'; // gray default
 }
 
 /**
@@ -110,10 +169,26 @@ function getSubjectEmoji(subject) {
 /**
  * Start video call
  */
-function startCall(tutor) {
+function startCall(tutorId) {
+    // Find tutor by ID
+    const tutor = tutorsData.find(t => t.id === tutorId);
+    
+    if (!tutor) {
+        console.error('❌ Tutor not found:', tutorId);
+        alert('Tutor not found. Please try again.');
+        return;
+    }
+
+    console.log('🎓 Starting session with:', tutor.name);
+
     // Store tutor info in sessionStorage
     sessionStorage.setItem('currentTutor', JSON.stringify(tutor));
     
     // Navigate to call page
     window.location.href = 'call.html';
 }
+
+// Make function globally available
+window.startCall = startCall;
+
+console.log('✅ app.js loaded successfully');

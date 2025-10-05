@@ -1,11 +1,20 @@
 /**
- * YoLearn.ai Backend Server - Production Ready (No config file required)
- * API Key from environment variables
+ * YoLearn.ai Backend Server - Production Ready
+ * 
+ * DEPLOYMENT INFORMATION:
+ * - Production: https://ai-tutor-platform-7vte.onrender.com (Render)
+ * - Local: http://localhost:5000
+ * - Frontend: https://ai-tutor-platform-lime.vercel.app (Vercel)
+ * 
+ * API Key from environment variables (set in Render dashboard)
  */
 
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+
+// Rest of your server.js code...
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;

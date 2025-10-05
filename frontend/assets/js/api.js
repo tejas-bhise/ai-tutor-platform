@@ -1,14 +1,25 @@
 /**
  * API Service - Handles all backend communication
- * Supports both local development and production deployment
+ * 
+ * DEPLOYMENT INFORMATION:
+ * - Production Backend: https://ai-tutor-platform-7vte.onrender.com
+ * - Local Backend: http://localhost:5000
+ * - Frontend (Vercel): https://ai-tutor-platform-lime.vercel.app
+ * - Frontend (Local): http://localhost:5500
+ * 
+ * Environment detection happens automatically based on hostname
  */
 
 // Detect environment and set API URL
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:5000'  // Local development
-    : 'https://ai-tutor-platform-7vte.onrender.com';  // Production - UPDATE THIS AFTER DEPLOYING BACKEND
+    : 'https://ai-tutor-platform-7vte.onrender.com';  // Production (Render)
 
 console.log('🌐 API Base URL:', API_BASE_URL);
+console.log('📍 Current Environment:', window.location.hostname === 'localhost' ? 'LOCAL' : 'PRODUCTION');
+
+// Rest of your api.js code...
+
 
 const api = {
     /**
