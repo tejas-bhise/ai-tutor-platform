@@ -10,7 +10,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-**[📹 Watch Demo](https://drive.google.com/file/d/1IkBTUbwiS8_BEgk9LE-TaYAeGrobxU16/view?usp=drive_link) | [📖 View Documentation](https://docs.google.com/presentation/d/1E6upFTihTMPBInp__Kyj6AOPpAJpGmfC/edit?usp=drive_link&ouid=100286719899966317244&rtpof=true&sd=true)**
+**[🚀 Live Demo](https://ai-tutor-platform-lime.vercel.app) | [📹 Watch Demo](https://drive.google.com/file/d/1IkBTUbwiS8_BEgk9LE-TaYAeGrobxU16/view?usp=drive_link) | [📖 View Documentation](https://docs.google.com/presentation/d/1E6upFTihTMPBInp__Kyj6AOPpAJpGmfC/edit?usp=drive_link&ouid=100286719899966317244&rtpof=true&sd=true)**
 
 ![YoLearn.ai Banner](https://drive.google.com/uc?export=view&id=1meN3Wv7yG99ylSxIAbNqzSgETPJBbOu0)
 
@@ -295,7 +295,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Contact
 
 - **Email**: tejasbhise1013@gmail.com
-----
+
+---
 
 <div align="center">
 
@@ -303,3 +304,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Made with ❤️ for students worldwide | © 2025 YoLearn.ai**
 
+</div>
+```
