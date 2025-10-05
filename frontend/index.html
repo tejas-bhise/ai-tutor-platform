@@ -23,33 +23,55 @@
         </div>
         
         <!-- Tutors Grid -->
-        <div id="tutors-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl z-10">
+        <div id="tutors-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl z-10 mb-16">
             <!-- Tutors will be loaded dynamically by app.js -->
         </div>
 
         <!-- Loading State (Hidden by default) -->
-        <div id="loading" class="hidden text-white text-xl">
+        <div id="loading" class="hidden text-white text-xl mb-16">
             <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white mx-auto mb-4"></div>
             Loading tutors...
         </div>
 
-        <!-- Footer with Links -->
-        <div class="text-center mt-12 z-10 text-white/60 text-sm">
-            <p class="mb-2">
-                🌐 <strong>Live App:</strong> 
-                <a href="https://ai-tutor-platform-lime.vercel.app" target="_blank" class="text-blue-300 hover:text-blue-200">Vercel Frontend</a>
-                <span class="mx-2">•</span>
-                <a href="https://ai-tutor-platform-7vte.onrender.com" target="_blank" class="text-green-300 hover:text-green-200">Render Backend</a>
-            </p>
-            <p class="text-xs">
-                💻 Local Development: 
-                <code class="bg-white/10 px-2 py-1 rounded">http://localhost:5500</code> (Frontend) • 
-                <code class="bg-white/10 px-2 py-1 rounded">http://localhost:5000</code> (Backend)
-            </p>
-            <p class="mt-3 text-white/50">
-                Made with ❤️ by 
-                <a href="https://github.com/tejas-bhise" target="_blank" class="text-purple-300 hover:text-purple-200">Tejas Bhise</a>
-            </p>
+        <!-- Deployment Links Section -->
+        <div class="text-center z-10 text-white/70 text-sm max-w-4xl" style="margin-top: 60px; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <!-- Live App Links -->
+            <div class="mb-4">
+                <p class="text-base font-semibold text-white/90 mb-2">
+                    🌐 <strong>Live App:</strong>
+                </p>
+                <p>
+                    <a href="https://ai-tutor-platform-lime.vercel.app" target="_blank" class="text-blue-300 hover:text-blue-200 transition-colors">
+                        Vercel Frontend
+                    </a>
+                    <span class="mx-3 text-white/40">•</span>
+                    <a href="https://ai-tutor-platform-7vte.onrender.com" target="_blank" class="text-green-300 hover:text-green-200 transition-colors">
+                        Render Backend
+                    </a>
+                </p>
+            </div>
+
+            <!-- Local Development -->
+            <div class="mb-6 text-xs">
+                <p class="text-white/60 mb-1">💻 <strong>Local Development:</strong></p>
+                <p>
+                    <code class="bg-white/10 px-2 py-1 rounded text-white/70">http://localhost:5500</code>
+                    <span class="mx-2 text-white/40">(Frontend)</span>
+                    <span class="mx-2 text-white/40">•</span>
+                    <code class="bg-white/10 px-2 py-1 rounded text-white/70">http://localhost:5000</code>
+                    <span class="mx-2 text-white/40">(Backend)</span>
+                </p>
+            </div>
+
+            <!-- Made By -->
+            <div class="text-white/50 text-xs" style="margin-top: 25px;">
+                <p>
+                    Made with ❤️ by 
+                    <a href="https://github.com/tejas-bhise" target="_blank" class="text-purple-300 hover:text-purple-200 transition-colors font-medium">
+                        Tejas Bhise
+                    </a>
+                </p>
+            </div>
         </div>
     </div>
 
@@ -58,9 +80,8 @@
     <script src="./assets/js/ui.js"></script>
     <script src="./assets/js/app.js"></script>
 
-    <!-- Deployment Info (Hidden in Production) -->
+    <!-- Deployment Info (Console Log) -->
     <script>
-        // Log deployment info for debugging
         console.log('%c🚀 YoLearn.ai Deployment Info', 'color: #667eea; font-size: 16px; font-weight: bold;');
         console.log('%cFrontend (Vercel):', 'color: #48bb78; font-weight: bold;', 'https://ai-tutor-platform-lime.vercel.app');
         console.log('%cBackend (Render):', 'color: #4299e1; font-weight: bold;', 'https://ai-tutor-platform-7vte.onrender.com');
