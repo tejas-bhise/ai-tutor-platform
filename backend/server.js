@@ -1,5 +1,6 @@
 /**
  * YoLearn.ai Backend Server - Production Ready v2.0
+ * Fixed for Render Deployment
  */
 
 // Load environment variables FIRST
@@ -19,7 +20,7 @@ console.log('🔍 Environment Check:');
 console.log('   GEMINI_API_KEY length:', GEMINI_API_KEY ? GEMINI_API_KEY.length : 0);
 console.log('   First 10 chars:', GEMINI_API_KEY ? GEMINI_API_KEY.substring(0, 10) + '...' : 'NOT SET');
 
-// AI Companions Database - 5 Specialized Tutors (UPDATED WITH READY PLAYER ME AVATARS)
+// AI Companions Database - 5 Specialized Tutors
 const AI_COMPANIONS = {
     'alex': {
         id: 'alex',
@@ -115,7 +116,7 @@ const AI_COMPANIONS = {
 
 // CORS Configuration
 const corsOptions = {
-    origin: '*',  // Allow all origins for testing
+    origin: '*',
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
@@ -126,11 +127,12 @@ app.use(express.json());
 app.options('*', cors(corsOptions));
 
 /**
- * Root endpoint
+ * Root endpoint - HEALTH CHECK FOR RENDER
  */
 app.get('/', (req, res) => {
     res.json({ 
         success: true,
+        status: 'online',
         message: '🎓 YoLearn.ai Backend is running!',
         version: '2.0.0',
         timestamp: new Date().toISOString(),
@@ -143,12 +145,25 @@ app.get('/', (req, res) => {
             rooms: '/api/video/rooms (POST)',
             webrtc: '/api/webrtc/config'
         },
-        tutors: Object.keys(AI_COMPANIONS).length
+        tutors: Object.keys(AI_COMPANIONS).length,
+        apiConfigured: !!GEMINI_API_KEY
     });
 });
 
 /**
- * Health check
+ * Health check - FOR RENDER MONITORING
+ */
+app.get('/health', (req, res) => {
+    res.json({
+        success: true,
+        status: 'healthy',
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString()
+    });
+});
+
+/**
+ * API Health check
  */
 app.get('/api/health', (req, res) => {
     res.json({
@@ -157,12 +172,13 @@ app.get('/api/health', (req, res) => {
         backend: 'operational',
         apiKeyConfigured: !!GEMINI_API_KEY,
         tutorsAvailable: Object.keys(AI_COMPANIONS).length,
+        uptime: process.uptime(),
         timestamp: new Date().toISOString()
     });
 });
 
 /**
- * GET /api/companions - List all AI tutors (LEGACY ENDPOINT)
+ * GET /api/companions - List all AI tutors (LEGACY)
  */
 app.get('/api/companions', (req, res) => {
     const companions = Object.values(AI_COMPANIONS);
@@ -179,7 +195,7 @@ app.get('/api/companions', (req, res) => {
 });
 
 /**
- * GET /api/tutors - List all AI tutors (NEW ENDPOINT)
+ * GET /api/tutors - List all AI tutors (NEW)
  */
 app.get('/api/tutors', (req, res) => {
     const tutors = Object.values(AI_COMPANIONS);
@@ -242,7 +258,6 @@ app.get('/api/tutors/:id', (req, res) => {
 app.post('/api/video/rooms', (req, res) => {
     const { userId, companionId } = req.body;
     
-    // Validate companion
     const companion = AI_COMPANIONS[companionId];
     if (!companion) {
         return res.status(400).json({
@@ -329,7 +344,7 @@ app.get('/api/webrtc/config', (req, res) => {
 });
 
 /**
- * POST /api/chat - NEW Chat endpoint (connects to frontend)
+ * POST /api/chat - Main chat endpoint
  */
 app.post('/api/chat', async (req, res) => {
     try {
@@ -345,7 +360,7 @@ app.post('/api/chat', async (req, res) => {
         if (!GEMINI_API_KEY) {
             return res.status(500).json({ 
                 success: false, 
-                error: 'API key not configured. Please add GEMINI_API_KEY environment variable.' 
+                error: 'API key not configured' 
             });
         }
 
@@ -440,7 +455,7 @@ Respond to the student's question following these guidelines.`;
 });
 
 /**
- * POST /api/generate - LEGACY Generate AI response endpoint
+ * POST /api/generate - LEGACY endpoint
  */
 app.post('/api/generate', async (req, res) => {
     try {
@@ -456,18 +471,16 @@ app.post('/api/generate', async (req, res) => {
         if (!GEMINI_API_KEY) {
             return res.status(500).json({ 
                 success: false, 
-                error: 'API key not configured. Please add GEMINI_API_KEY environment variable.' 
+                error: 'API key not configured' 
             });
         }
 
         console.log('📨 Request from', tutorName, ':', query.substring(0, 50) + '...');
 
-        // Find tutor by name
         const tutor = Object.values(AI_COMPANIONS).find(
             c => c.name.toLowerCase() === tutorName.toLowerCase()
         ) || AI_COMPANIONS['alex'];
 
-        // Build specialized system prompt
         const systemPrompt = `You are ${tutor.name}, an AI Tutor specializing in ${tutor.specialty}.
 
 YOUR EXPERTISE:
@@ -491,7 +504,6 @@ Respond to the student's question following these guidelines.`;
 
         const fullPrompt = `${systemPrompt}\n\nStudent's question: "${query}"\n\nProvide a clear, educational response:`;
 
-        // Call Gemini API
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}`;
 
         const response = await axios.post(apiUrl, {
@@ -515,7 +527,6 @@ Respond to the student's question following these guidelines.`;
             throw new Error('No response from AI');
         }
 
-        // Clean response for TTS
         const cleanedResponse = aiResponse
             .replace(/\*/g, '')
             .replace(/\#/g, '')
@@ -553,16 +564,16 @@ app.use((req, res) => {
     res.status(404).json({
         success: false,
         error: 'Endpoint not found',
+        requestedPath: req.path,
         availableEndpoints: {
-            health: 'GET /api/health',
+            root: 'GET /',
+            health: 'GET /health',
+            apiHealth: 'GET /api/health',
             companions: 'GET /api/companions',
             tutors: 'GET /api/tutors',
-            companionById: 'GET /api/companions/:id',
-            tutorById: 'GET /api/tutors/:id',
             chat: 'POST /api/chat',
             generate: 'POST /api/generate',
             createRoom: 'POST /api/video/rooms',
-            getRoom: 'GET /api/video/rooms/:roomId',
             webrtcConfig: 'GET /api/webrtc/config'
         }
     });
@@ -581,12 +592,12 @@ app.use((error, req, res, next) => {
 });
 
 /**
- * Start server
+ * Start server - LISTEN ON 0.0.0.0 FOR RENDER
  */
-app.listen(PORT, () => {
-    console.log('='.repeat(60));
+app.listen(PORT, '0.0.0.0', () => {
+    console.log('\n============================================================');
     console.log('🚀 YoLearn.ai Backend Server v2.0 Started!');
-    console.log('='.repeat(60));
+    console.log('============================================================');
     console.log(`📡 Port: ${PORT}`);
     console.log(`🔑 API Key: ${GEMINI_API_KEY ? '✅ Configured' : '❌ Missing'}`);
     console.log(`👥 AI Tutors: ${Object.keys(AI_COMPANIONS).length}`);
@@ -595,7 +606,7 @@ app.listen(PORT, () => {
     Object.values(AI_COMPANIONS).forEach(tutor => {
         console.log(`   ${tutor.emoji} ${tutor.name} - ${tutor.specialty}`);
     });
-    console.log('='.repeat(60));
+    console.log('============================================================\n');
 });
 
 // Graceful shutdown
