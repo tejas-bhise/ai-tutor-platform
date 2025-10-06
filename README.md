@@ -1,4 +1,3 @@
-
 <div align="center">
 
 # 🎓 YoLearn.ai - AI-Powered Interactive Tutoring Platform
@@ -176,7 +175,7 @@ http://localhost:5500/frontend/index.html
 ---
 
 ### 🎭 3D Avatar Learning Session
-<img src="https://drive.google.com/uc?export=view&id=1joY7GJWB-5a3Li6-47uSA1HyClKBlkn5" alt="Avatar Session" width="800"/>
+<img src="https://drive.google.com/uc?export=view&id=1Ps2-ZAl2mHGj3Nx6k3KRNgu1at8_EPDQ" alt="Avatar Session" width="800"/>
 
 *Realistic 3D avatar with lip-sync, resizable panels, live chat, and webcam integration*
 
@@ -194,7 +193,6 @@ http://localhost:5500/frontend/index.html
 
 ![YoLearn.ai System Architecture](https://drive.google.com/uc?export=view&id=14ICxpaFMwqDtxizaz9_UMR2kLtvcikqA)
 
-*Complete system architecture showing Frontend (Browser), Backend (Node.js + Express), and AI Service (Google Gemini 2.0 Flash) with 5 specialized AI tutors*
 
 ---
 
@@ -264,9 +262,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Contact & Support
 
 - **Email**: [tejasbhise1013@gmail.com](mailto:tejasbhise1013@gmail.com)
-
-
-
 
 ---
 
