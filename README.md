@@ -1,17 +1,21 @@
+
 <div align="center">
 
 # 🎓 YoLearn.ai - AI-Powered Interactive Tutoring Platform
 
-### *The Future of Personalized Education*
+### *The Future of Personalized Education with 3D Avatar Technology*
+
+🚀 [Live Demo](https://ai-tutor-platform-lime.vercel.app) | 📹 [Watch Demo](https://drive.google.com/file/d/1V23_WMqq_aOOVyFKcvr_La-mz2LTsual/view?usp=drive_link) | 📖 [View Documentation](https://docs.google.com/presentation/d/1E6upFTihTMPBInp__Kyj6AOPpAJpGmfC/edit?usp=drive_link&ouid=100286719899966317244&rtpof=true&sd=true)
 
 [![Made with Love](https://img.shields.io/badge/Made%20with-❤️-red.svg)](https://github.com/yourusername/yolearn-ai)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-43853D.svg?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express.js-4.18+-000000.svg?logo=express&logoColor=white)](https://expressjs.com/)
+[![Three.js](https://img.shields.io/badge/Three.js-r128-black.svg?logo=three.js&logoColor=white)](https://threejs.org/)
+[![Gemini AI](https://img.shields.io/badge/Google%20Gemini-2.0-4285F4.svg?logo=google&logoColor=white)](https://ai.google.dev/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-**[🚀 Live Demo](https://ai-tutor-platform-lime.vercel.app) | [📹 Watch Demo](https://drive.google.com/file/d/1IkBTUbwiS8_BEgk9LE-TaYAeGrobxU16/view?usp=drive_link) | [📖 View Documentation](https://docs.google.com/presentation/d/1E6upFTihTMPBInp__Kyj6AOPpAJpGmfC/edit?usp=drive_link&ouid=100286719899966317244&rtpof=true&sd=true)**
-
-![YoLearn.ai Banner](https://drive.google.com/uc?export=view&id=1Uw83ueSPw1GOgHi4jxv8ARtM4cJMy1Gp)
+![YoLearn.ai Banner](https://drive.google.com/uc?export=view&id=1joY7GJWB-5a3Li6-47uSA1HyClKBlkn5)
 
 </div>
 
@@ -32,69 +36,51 @@ In today's education system:
 
 ## 💡 Our Solution
 
-YoLearn.ai is an **AI-powered interactive tutoring platform** that provides:
+YoLearn.ai is an **AI-powered interactive tutoring platform** featuring:
 
-✅ **24/7 availability** - Learn anytime, anywhere  
-✅ **$0 cost** - Free quality education for everyone  
-✅ **Voice-enabled learning** - Natural conversations with AI tutors  
-✅ **Interactive whiteboard** - Visual learning for complex concepts  
-✅ **Personalized experience** - Adaptive learning tailored to you  
-✅ **Multi-subject expertise** - Math, Science, Arts, History, and more  
-
----
-
-## ✨ Key Features
-
-### 🤖 **Intelligent AI Tutors**
-Meet **Alex** (Math & Science Expert) and **Sophia** (Arts & Humanities Specialist) - your personal AI tutors powered by Google Gemini 2.0.
-
-### 🎤 **Voice-First Learning**
-- Real-time **speech-to-text** for hands-free learning
-- Natural **text-to-speech** responses
-- Conversational AI that understands context and follows commands
-
-### 🎨 **Interactive Whiteboard**
-- Draw diagrams, solve equations visually
-- Pen, eraser, shapes, and text tools
-- Save and download your work
-- Touch-enabled for tablets and mobile
-
-### 📝 **Smart Note-Taking**
-- Rich text editor with formatting
-- Auto-save functionality
-- Export notes as PDF
-- Organized by topic and session
-
-### 👨‍🏫 **Animated 3D Avatar**
-- Realistic tutor animations
-- Lip-sync with speech
-- Expressive gestures and emotions
-- Engaging visual presence
-
-### 📊 **Progress Tracking**
-- Real-time learning analytics
-- Achievement system with levels
-- Gamified learning experience
-- Personalized recommendations
+✅ **3D Avatar Tutor** - Realistic animated teacher with lip-sync  
+✅ **Voice-First Learning** - Natural speech conversations with AI  
+✅ **Resizable Interface** - Adaptable layout for any screen  
+✅ **Instant Stop Control** - Real-time speech interruption  
+✅ **24/7 Availability** - Learn anytime, anywhere  
+✅ **5 Expert Tutors** - Specialized in different subjects  
 
 ---
 
-## 🎯 Target Impact
+## ✨ Key Features We Built
 
-### Education Accessibility
-- **10M+ students** worldwide can access free tutoring
-- **80% cost reduction** compared to traditional tutoring
-- **24/7 availability** eliminates scheduling conflicts
+### 🤖 **5 Specialized AI Tutors**
+- **Alex** - Math, Science & Technology Expert
+- **Sophia** - Computer Science & Programming
+- **Maya** - Data Science & AI/ML
+- **Ryan** - Engineering & Design  
+- **Emma** - Business & Economics
 
-### Learning Outcomes
-- **45% improvement** in student engagement
-- **60% faster** concept understanding with visual aids
-- **3x retention** with interactive learning
+### 🎭 **Realistic 3D Avatar**
+- **Ready Player Me** integration for lifelike avatars
+- **Mouth animation** synchronized with speech using morph targets
+- **Idle animations** with gentle sway and breathing motion
+- **Three.js rendering** for smooth 60fps performance
 
-### Global Reach
-- **Multi-language support** (coming soon)
-- **Offline mode** for low-connectivity areas
-- **Accessible design** for students with disabilities
+### 🎤 **Advanced Voice Controls**
+- **Real-time speech-to-text** using Web Speech API
+- **High-quality text-to-speech** with natural voices
+- **Instant stop button** with triple-cancel mechanism
+- **Voice commands** recognition for hands-free learning
+
+### 🖼️ **Intelligent Interface**
+- **Resizable panels** - Drag divider to adjust avatar/chat ratio
+- **Responsive design** - Works on desktop, tablet, mobile
+- **Session recording** - Save learning sessions as WebM
+- **Live webcam** - Picture-in-picture student view
+- **Dark theme** - Eye-friendly UI for extended learning
+
+### 🧠 **Smart AI Responses**
+- **Concise answers** (max 200 words) - No information overload
+- **Structured formatting** with bullet points and examples
+- **Context awareness** - Remembers conversation history
+- **Multi-turn conversations** - Natural dialogue flow
+- **Specialized prompts** - Tutor-specific teaching styles
 
 ---
 
@@ -102,24 +88,35 @@ Meet **Alex** (Math & Science Expert) and **Sophia** (Arts & Humanities Speciali
 
 ### Frontend
 ```
-HTML5 | CSS3 | Vanilla JavaScript
-Canvas API | Web Speech API | Quill.js
-Responsive Design | PWA-ready
+HTML5 | CSS3 (1850+ lines) | Vanilla JavaScript (650+ lines)
+Three.js r128 (3D Graphics) | GLTFLoader
+Web Speech API (Recognition & Synthesis)
+Ready Player Me SDK | WebRTC (MediaRecorder)
+Responsive Design | Glassmorphism UI
 ```
 
 ### Backend
 ```
-Node.js | Express.js
-RESTful API | Google Gemini AI
-Error Handling | Logging
+Node.js 18+ | Express.js 4.18+
+RESTful API | Google Gemini 2.0 Flash API
+CORS Configuration | Error Handling
+JSON Request/Response | Real-time Processing
 ```
 
-### AI & ML
+### AI & Graphics
 ```
-Google Gemini 2.0 Flash
+Google Gemini 2.0 Flash API (Multi-turn conversations)
+Ready Player Me 3D Avatars (.glb format)
+Speech Synthesis API (Browser native)
+Speech Recognition API (WebkitSpeechRecognition)
 Natural Language Processing
-Context-Aware Responses
-Multi-turn Conversations
+```
+
+### DevOps & Deployment
+```
+Vercel (Frontend hosting)
+Local Node.js server (Development)
+GitHub (Version control)
 ```
 
 ---
@@ -129,23 +126,18 @@ Multi-turn Conversations
 ### Prerequisites
 - Node.js 18+ installed
 - Google Gemini API key ([Get it free](https://makersuite.google.com/app/apikey))
-- Modern web browser (Chrome, Firefox, Edge)
+- Modern web browser with WebGL support (Chrome, Firefox, Edge)
 
 ### Installation
 
-**1. Clone the repository**
+**1. Clone & Setup**
 ```
 git clone https://github.com/yourusername/yolearn-ai.git
 cd yolearn-ai
+cd backend && npm install
 ```
 
-**2. Setup Backend**
-```
-cd backend
-npm install
-```
-
-**3. Configure API Key**
+**2. Configure API**
 Create `backend/config/config.js`:
 ```
 module.exports = {
@@ -154,99 +146,55 @@ module.exports = {
 };
 ```
 
-**4. Start Backend Server**
+**3. Start Application**
 ```
+# Terminal 1: Start Backend
+cd backend
 npm start
-```
+# Server will run on http://localhost:5000
 
-**5. Start Frontend**
-```
-cd ../frontend
+# Terminal 2: Start Frontend (use Live Server or Python)
+cd frontend
 python -m http.server 5500
+# Or right-click call.html > Open with Live Server
 ```
 
-**6. Open Application**
+**4. Open Browser**
 ```
-http://localhost:5500
+http://localhost:5500/frontend/index.html
 ```
 
 ---
 
 ## 📸 Screenshots
 
-### 🏠 Dashboard - Choose Your AI Tutor
-<img src="https://drive.google.com/uc?export=view&id=1Uw83ueSPw1GOgHi4jxv8ARtM4cJMy1Gp" alt="Dashboard" width="800"/>
+### 🏠 Homepage - Select Your AI Tutor
+<img src="https://drive.google.com/uc?export=view&id=1joY7GJWB-5a3Li6-47uSA1HyClKBlkn5" alt="Homepage" width="800"/>
 
-*Select between Alex (Science & Math) or Sophia (Arts & Humanities)*
-
----
-
-### 💬 Live Chat & Video Stream Mode
-<img src="https://drive.google.com/uc?export=view&id=19nc2wUsJJDuUBdQRzL7f0NmpgBaRTO18" alt="Chat Mode" width="800"/>
-
-*Real-time voice and text conversations with your AI tutor*
+*Choose from 5 specialized AI tutors, each with unique expertise and teaching style*
 
 ---
 
-### 🎨 Interactive Whiteboard
-<img src="https://drive.google.com/uc?export=view&id=11E7ea8uWm1tDj4GaLFqAIrwGubBuQcjj" alt="Whiteboard" width="800"/>
+### 🎭 3D Avatar Learning Session
+<img src="https://drive.google.com/uc?export=view&id=1joY7GJWB-5a3Li6-47uSA1HyClKBlkn5" alt="Avatar Session" width="800"/>
 
-*Draw, sketch, and visualize concepts with professional whiteboard tools*
-
----
-
-### 📝 Smart Note-Taking System
-<img src="https://drive.google.com/uc?export=view&id=1NiyGb0OphGSnC7Ycqi5PpPebgfiTuIfk" alt="Notes" width="800"/>
-
-*Rich text editor with formatting, export, and auto-save features*
+*Realistic 3D avatar with lip-sync, resizable panels, live chat, and webcam integration*
 
 ---
 
 ## 🎥 Demo Video
 
-[![Watch Full Demo](https://img.shields.io/badge/▶️-Watch%20Full%20Demo%20Video-red?style=for-the-badge&logo=google-drive)](https://drive.google.com/file/d/1IkBTUbwiS8_BEgk9LE-TaYAeGrobxU16/view?usp=drive_link)
+[![Watch Full Demo](https://img.shields.io/badge/▶️-Watch%20Full%20Demo%20Video-red?style=for-the-badge&logo=google-drive)](https://drive.google.com/file/d/1V23_WMqq_aOOVyFKcvr_La-mz2LTsual/view?usp=drive_link)
 
-> *Complete walkthrough showcasing all platform features*
-
----
-
-## 📖 Documentation
-
-[![View Presentation](https://img.shields.io/badge/📊-View%20Full%20Documentation-blue?style=for-the-badge&logo=google-slides)](https://docs.google.com/presentation/d/1E6upFTihTMPBInp__Kyj6AOPpAJpGmfC/edit?usp=drive_link&ouid=100286719899966317244&rtpof=true&sd=true)
-
-*Comprehensive presentation with technical details and use cases*
+> *Complete walkthrough showcasing 3D avatar, voice controls, resizable panels, and AI responses*
 
 ---
 
 ## 🏗️ Architecture
 
-```
-┌─────────────────────────────────────────────────┐
-│                  Frontend                       │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐       │
-│  │   Chat   │  │Whiteboard│  │  Notes   │       │
-│  └──────────┘  └──────────┘  └──────────┘       │
-│         ↓              ↓              ↓         │
-│  ┌──────────────────────────────────────┐       │
-│  │      Speech Service & Avatar         │       │
-│  └──────────────────────────────────────┘       │
-└─────────────────────────────────────────────────┘
-                       ↓
-              REST API (JSON)
-                       ↓
-┌─────────────────────────────────────────────────┐
-│              Backend (Node.js)                  │
-│  ┌──────────────────────────────────────┐       │
-│  │       Express Server (Port 5000)     │       │
-│  └──────────────────────────────────────┘       │
-│                     ↓                           │
-│  ┌──────────────────────────────────────┐       │
-│  │      Gemini AI Service               │       │
-│  └──────────────────────────────────────┘       │
-└─────────────────────────────────────────────────┘
-                       ↓
-              Google Gemini 2.0 API
-```
+![YoLearn.ai System Architecture](https://drive.google.com/uc?export=view&id=14ICxpaFMwqDtxizaz9_UMR2kLtvcikqA)
+
+*Complete system architecture showing Frontend (Browser), Backend (Node.js + Express), and AI Service (Google Gemini 2.0 Flash) with 5 specialized AI tutors*
 
 ---
 
@@ -254,12 +202,28 @@ http://localhost:5500
 
 | Feature | YoLearn.ai | Khan Academy | Chegg | Coursera |
 |---------|-----------|--------------|-------|----------|
-| **Real-time Voice Chat** | ✅ | ❌ | ❌ | ❌ |
-| **Interactive Whiteboard** | ✅ | ❌ | ❌ | ❌ |
-| **24/7 AI Tutor** | ✅ | ❌ | ⚠️ | ❌ |
-| **Visual Avatar** | ✅ | ❌ | ❌ | ❌ |
+| **3D Avatar Tutor** | ✅ | ❌ | ❌ | ❌ |
+| **Voice Conversations** | ✅ | ❌ | ❌ | ❌ |
+| **Real-time Lip-sync** | ✅ | ❌ | ❌ | ❌ |
+| **Instant Speech Stop** | ✅ | ❌ | ❌ | ❌ |
+| **Resizable Interface** | ✅ | ❌ | ❌ | ❌ |
+| **24/7 AI Availability** | ✅ | ❌ | ⚠️ | ❌ |
+| **Session Recording** | ✅ | ❌ | ❌ | ❌ |
 | **Cost** | **Free** | Free | $14.95/mo | $49/mo |
-| **Personalized Learning** | ✅ | ⚠️ | ⚠️ | ✅ |
+| **Personalization** | ✅ | ⚠️ | ⚠️ | ✅ |
+
+---
+
+## 🚀 Future Enhancements
+
+- [ ] **Multi-language support** - Translate tutor responses
+- [ ] **Progress tracking** - Database integration for user analytics
+- [ ] **Whiteboard feature** - Visual drawing for math/science
+- [ ] **Offline mode** - PWA with service workers
+- [ ] **Mobile app** - React Native version
+- [ ] **Screen sharing** - Collaborative problem-solving
+- [ ] **Quiz system** - Gamified assessments
+- [ ] **Voice cloning** - Custom tutor voices
 
 ---
 
@@ -267,10 +231,18 @@ http://localhost:5500
 
 We welcome contributions! Here's how you can help:
 
-1. 🐛 **Report bugs** - Create an issue
-2. 💡 **Suggest features** - Open a discussion
-3. 🔧 **Submit PRs** - Fix bugs or add features
-4. 📖 **Improve docs** - Help others understand
+1. 🐛 **Report bugs** - Create an issue with reproduction steps
+2. 💡 **Suggest features** - Open a discussion with use cases
+3. 🔧 **Submit PRs** - Fix bugs or add features (with tests)
+4. 📖 **Improve docs** - Help others understand the codebase
+5. ⭐ **Star the repo** - Show your support!
+
+**Contribution Guidelines:**
+- Follow existing code style
+- Add comments for complex logic
+- Test your changes thoroughly
+- Update README if needed
+
 ---
 
 ## 📄 License
@@ -281,16 +253,20 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **Google Gemini AI** for powerful language models
-- **Quill.js** for rich text editing
-- **Lucide Icons** for beautiful UI icons
-- **Open Source Community** for inspiration
+- **Google Gemini AI** - For providing free, powerful language models
+- **Ready Player Me** - For 3D avatar technology and easy integration
+- **Three.js Community** - For excellent 3D graphics library and docs
+- **Web Speech API** - For enabling voice recognition in browsers
+- **Express.js Team** - For lightweight, fast backend framework
 
 ---
 
-## 📞 Contact
+## 📞 Contact & Support
 
-- **Email**: tejasbhise1013@gmail.com
+- **Email**: [tejasbhise1013@gmail.com](mailto:tejasbhise1013@gmail.com)
+
+
+
 
 ---
 
