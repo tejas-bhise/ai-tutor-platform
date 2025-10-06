@@ -1,8 +1,9 @@
 /**
- * Main Application Logic for Home Page - FIXED VERSION
+ * YoLearn.ai v2.0 - Main Application Logic
+ * Homepage with 5 specialized AI tutors
  */
 
-// Hardcoded tutor data (no backend dependency)
+// 5 Specialized AI Tutors Data
 const tutorsData = [
     {
         id: 'alex',
@@ -14,15 +15,36 @@ const tutorsData = [
     {
         id: 'sophia',
         name: 'Sophia',
-        specialty: 'Arts & Humanities Specialist',
-        emoji: '👩‍🏫',
-        subjects: ['Literature', 'Arts', 'History']
+        specialty: 'Computer Science & Programming',
+        emoji: '👩‍💻',
+        subjects: ['Python', 'JavaScript', 'Web Dev', 'Algorithms']
+    },
+    {
+        id: 'maya',
+        name: 'Maya',
+        specialty: 'Data Science & AI/ML Expert',
+        emoji: '👩‍🔬',
+        subjects: ['Machine Learning', 'Data Science', 'AI']
+    },
+    {
+        id: 'ryan',
+        name: 'Ryan',
+        specialty: 'Engineering & Design Specialist',
+        emoji: '👨‍🔧',
+        subjects: ['Mechanical', 'Electrical', 'CAD', 'Circuits']
+    },
+    {
+        id: 'emma',
+        name: 'Emma',
+        specialty: 'Business & Economics Expert',
+        emoji: '👩‍💼',
+        subjects: ['Economics', 'Finance', 'Business', 'Marketing']
     }
 ];
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('🚀 YoLearn.ai Loading...');
+    console.log('🚀 YoLearn.ai v2.0 Loading...');
 
     // Create particles if function exists
     if (typeof UIHelpers !== 'undefined' && UIHelpers.createParticles) {
@@ -37,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /**
- * Load tutors (using hardcoded data)
+ * Load tutors (using local data)
  */
 async function loadTutors() {
     const tutorsGrid = document.getElementById('tutors-grid');
@@ -47,32 +69,13 @@ async function loadTutors() {
         return;
     }
 
-    // Show loading if available
-    if (typeof UIHelpers !== 'undefined' && UIHelpers.showLoading) {
-        UIHelpers.showLoading();
-    }
-
     try {
-        // Display tutors using hardcoded data
+        // Display tutors
         displayTutors(tutorsData);
         console.log('✅ Tutors loaded successfully');
         
-        // Hide error if any
-        if (typeof UIHelpers !== 'undefined' && UIHelpers.hideError) {
-            UIHelpers.hideError();
-        }
-        
     } catch (error) {
         console.error('❌ Error loading tutors:', error);
-        
-        if (typeof UIHelpers !== 'undefined' && UIHelpers.showError) {
-            UIHelpers.showError('Error loading tutors. Please refresh the page.');
-        }
-    } finally {
-        // Hide loading
-        if (typeof UIHelpers !== 'undefined' && UIHelpers.hideLoading) {
-            UIHelpers.hideLoading();
-        }
     }
 }
 
@@ -144,9 +147,21 @@ function getSubjectColorRGB(subject) {
         'Physics': '59, 130, 246',    // blue
         'Math': '34, 197, 94',         // green
         'Coding': '168, 85, 247',      // purple
-        'Literature': '236, 72, 153',  // pink
-        'Arts': '251, 191, 36',        // yellow
-        'History': '239, 68, 68'       // red
+        'Python': '34, 197, 94',       // green
+        'JavaScript': '251, 191, 36',  // yellow
+        'Web Dev': '59, 130, 246',     // blue
+        'Algorithms': '168, 85, 247',  // purple
+        'Machine Learning': '236, 72, 153',  // pink
+        'Data Science': '168, 85, 247',      // purple
+        'AI': '236, 72, 153',          // pink
+        'Mechanical': '251, 146, 60',  // orange
+        'Electrical': '234, 179, 8',   // amber
+        'CAD': '251, 191, 36',         // yellow
+        'Circuits': '251, 146, 60',    // orange
+        'Economics': '236, 72, 153',   // pink
+        'Finance': '34, 197, 94',      // green
+        'Business': '59, 130, 246',    // blue
+        'Marketing': '251, 191, 36'    // yellow
     };
     return colors[subject] || '156, 163, 175'; // gray default
 }
@@ -159,15 +174,27 @@ function getSubjectEmoji(subject) {
         'Physics': '🧪',
         'Math': '🔢',
         'Coding': '💻',
-        'Literature': '📚',
-        'Arts': '🎨',
-        'History': '🌍'
+        'Python': '🐍',
+        'JavaScript': '⚡',
+        'Web Dev': '🌐',
+        'Algorithms': '🧮',
+        'Machine Learning': '🤖',
+        'Data Science': '📊',
+        'AI': '🧠',
+        'Mechanical': '⚙️',
+        'Electrical': '💡',
+        'CAD': '📐',
+        'Circuits': '🔌',
+        'Economics': '💰',
+        'Finance': '💵',
+        'Business': '📊',
+        'Marketing': '📢'
     };
     return emojis[subject] || '📖';
 }
 
 /**
- * Start video call
+ * Start learning session
  */
 function startCall(tutorId) {
     // Find tutor by ID
@@ -184,6 +211,10 @@ function startCall(tutorId) {
     // Store tutor info in sessionStorage
     sessionStorage.setItem('currentTutor', JSON.stringify(tutor));
     
+    // Generate room ID
+    const roomId = `room_${Date.now()}_${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
+    sessionStorage.setItem('currentRoomId', roomId);
+    
     // Navigate to call page
     window.location.href = 'call.html';
 }
@@ -191,4 +222,5 @@ function startCall(tutorId) {
 // Make function globally available
 window.startCall = startCall;
 
-console.log('✅ app.js loaded successfully');
+console.log('✅ app.js v2.0 loaded successfully');
+console.log('👥 Available Tutors:', tutorsData.map(t => t.name).join(', '));
