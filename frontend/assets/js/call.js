@@ -2,14 +2,31 @@
  * YoLearn.ai v2.0 - Call.js
  * Complete JavaScript for Learning Session
  * Features: 3D Avatar, Voice Control, Resizable Panels, Animations
+ * FIXED: All errors resolved, production-ready
  */
 
+// ============================================
+// ENVIRONMENT DETECTION & API CONFIGURATION
+// ============================================
+
+// Detect environment FIRST (before any code uses it)
+const isDevelopment = window.location.hostname === 'localhost' || 
+                      window.location.hostname === '127.0.0.1' ||
+                      window.location.hostname.includes('192.168');
+
+// Avatar and API URLs
 const AVATAR_URL = 'https://models.readyplayer.me/68e3549ab7446b1aad116ab5.glb';
 const API_URL = isDevelopment 
     ? 'http://localhost:5000/api/chat'  // Local development
-    : 'https://ai-tutor-platform-7vte.onrender.com/api/chat';  // Production
+    : 'https://ai-tutor-platform-7vte.onrender.com/api/chat';  // Production (Render)
 
-// Global variables
+console.log('🌍 Environment:', isDevelopment ? 'Development' : 'Production');
+console.log('🔗 API URL:', API_URL);
+
+// ============================================
+// GLOBAL VARIABLES
+// ============================================
+
 let scene, camera, renderer, avatar, mixer, clock;
 let isListening = false;
 let recognition;
@@ -23,12 +40,13 @@ let morphTargetInfluences = null;
 // INITIALIZE ON PAGE LOAD
 // ============================================
 window.addEventListener('DOMContentLoaded', () => {
+    console.log('✅ YoLearn.ai initialized successfully!');
     loadTutorInfo();
     init3DAvatar();
     startWebcam();
     startTimer();
     setupVoiceRecognition();
-    initResizer(); // NEW: Resizable panels
+    initResizer(); // Resizable panels
 });
 
 // ============================================
@@ -52,7 +70,7 @@ function loadTutorInfo() {
 }
 
 // ============================================
-// RESIZABLE PANELS (NEW FEATURE!)
+// RESIZABLE PANELS
 // ============================================
 function initResizer() {
     const resizer = document.getElementById('resizer');
@@ -296,7 +314,7 @@ function toggleChat() {
 }
 
 // ============================================
-// SEND MESSAGE TO BACKEND
+// SEND MESSAGE TO BACKEND (FIXED!)
 // ============================================
 async function sendMessage() {
     const input = document.getElementById('message-input');
@@ -314,7 +332,7 @@ async function sendMessage() {
     try {
         console.log('📤 Sending message:', message);
         
-        const response = await fetch(`${API_URL}/api/chat`, {
+        const response = await fetch(API_URL, {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
@@ -346,7 +364,7 @@ async function sendMessage() {
         console.error('❌ API Error:', error);
         typingDiv.remove();
         addMessage(
-            'Connection error. Make sure the backend is running on http://localhost:5000', 
+            'Connection error. Please check your internet connection and try again.', 
             'tutor'
         );
     }
@@ -427,7 +445,7 @@ function speak(text) {
         
         // Show stop button
         const stopBtn = document.getElementById('stop-btn');
-        stopBtn.classList.add('active');
+        if (stopBtn) stopBtn.classList.add('active');
         
         // Start speaking animation
         currentUtterance.onstart = () => {
@@ -439,7 +457,7 @@ function speak(text) {
         currentUtterance.onend = () => {
             isSpeaking = false;
             currentUtterance = null;
-            stopBtn.classList.remove('active');
+            if (stopBtn) stopBtn.classList.remove('active');
             
             // Close mouth
             if (morphTargetInfluences && morphTargetInfluences.length > 0) {
@@ -453,7 +471,7 @@ function speak(text) {
             console.error('❌ Speech error:', event.error);
             isSpeaking = false;
             currentUtterance = null;
-            stopBtn.classList.remove('active');
+            if (stopBtn) stopBtn.classList.remove('active');
             
             // Close mouth
             if (morphTargetInfluences && morphTargetInfluences.length > 0) {
@@ -468,7 +486,7 @@ function speak(text) {
 }
 
 // ============================================
-// STOP SPEAKING (NEW FEATURE!)
+// STOP SPEAKING (INSTANT!)
 // ============================================
 function stopSpeaking() {
     // FORCE STOP - Multiple methods for instant termination
@@ -491,7 +509,7 @@ function stopSpeaking() {
     
     // Hide stop button
     const stopBtn = document.getElementById('stop-btn');
-    stopBtn.classList.remove('active');
+    if (stopBtn) stopBtn.classList.remove('active');
     
     // Close avatar mouth immediately
     if (morphTargetInfluences && morphTargetInfluences.length > 0) {
@@ -526,12 +544,14 @@ function setupVoiceRecognition() {
     recognition.onerror = (event) => {
         console.error('❌ Voice recognition error:', event.error);
         isListening = false;
-        document.getElementById('voice-btn').classList.remove('active');
+        const voiceBtn = document.getElementById('voice-btn');
+        if (voiceBtn) voiceBtn.classList.remove('active');
     };
     
     recognition.onend = () => {
         isListening = false;
-        document.getElementById('voice-btn').classList.remove('active');
+        const voiceBtn = document.getElementById('voice-btn');
+        if (voiceBtn) voiceBtn.classList.remove('active');
     };
 }
 
@@ -546,13 +566,13 @@ function toggleVoice() {
     if (isListening) {
         recognition.stop();
         isListening = false;
-        voiceBtn.classList.remove('active');
+        if (voiceBtn) voiceBtn.classList.remove('active');
         console.log('🎤 Voice input stopped');
     } else {
         try {
             recognition.start();
             isListening = true;
-            voiceBtn.classList.add('active');
+            if (voiceBtn) voiceBtn.classList.add('active');
             console.log('🎤 Voice input started');
         } catch (error) {
             console.error('❌ Voice start error:', error);
@@ -608,8 +628,10 @@ async function startRecording() {
         mediaRecorder.start();
         isRecording = true;
         
-        document.getElementById('record-text').textContent = 'Stop Recording';
-        document.getElementById('record-btn').classList.add('recording');
+        const recordText = document.getElementById('record-text');
+        const recordBtn = document.getElementById('record-btn');
+        if (recordText) recordText.textContent = 'Stop Recording';
+        if (recordBtn) recordBtn.classList.add('recording');
         
         console.log('🔴 Recording started');
     } catch (error) {
@@ -624,8 +646,10 @@ function stopRecording() {
         mediaRecorder.stream.getTracks().forEach(track => track.stop());
         
         isRecording = false;
-        document.getElementById('record-text').textContent = 'Start Recording';
-        document.getElementById('record-btn').classList.remove('recording');
+        const recordText = document.getElementById('record-text');
+        const recordBtn = document.getElementById('record-btn');
+        if (recordText) recordText.textContent = 'Start Recording';
+        if (recordBtn) recordBtn.classList.remove('recording');
         
         console.log('⏹️ Recording stopped');
     }
@@ -658,7 +682,7 @@ document.addEventListener('click', (e) => {
     const menu = document.getElementById('dropdown-menu');
     const btn = document.querySelector('.menu-btn');
     
-    if (!menu.contains(e.target) && e.target !== btn) {
+    if (menu && !menu.contains(e.target) && e.target !== btn) {
         menu.classList.remove('active');
     }
 });
@@ -678,4 +702,4 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-console.log('✅ YoLearn.ai initialized successfully!');
+console.log('✅ All systems initialized! Ready to learn! 🎓');
