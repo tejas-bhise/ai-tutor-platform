@@ -1,4 +1,16 @@
-/* Tailwind-like utilities for call page */
+/* YoLearn.ai v5.0 - Call Styles
+ * MAJOR UPDATES:
+ * ✅ RIGHT-SIDE PANELS (not full-screen modals)
+ * ✅ Whiteboard & Notes panel styling
+ * ✅ Smaller recording button
+ * ✅ Better animations
+ * ✅ Optimized performance
+ */
+
+/* ============================================
+ * BASE STYLES & RESET
+ * ============================================ */
+
 * {
     margin: 0;
     padding: 0;
@@ -7,7 +19,13 @@
 
 body {
     font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    background: #0f172a;
 }
+
+/* ============================================
+ * TAILWIND-LIKE UTILITIES
+ * ============================================ */
 
 .bg-gray-900 { background-color: #111827; }
 .bg-gray-800 { background-color: #1f2937; }
@@ -71,12 +89,825 @@ body {
     .lg\:w-3\/5 { width: 60%; }
 }
 
+/* ============================================
+ * AVATAR CONTAINER
+ * ============================================ */
+
 #avatar-container {
     width: 100%;
     height: 100%;
+    position: relative;
 }
 
 #avatar-container canvas {
     width: 100% !important;
     height: 100% !important;
+}
+
+/* ============================================
+ * DRAGGABLE WEBCAM
+ * ============================================ */
+
+#webcam-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 200px;
+    height: 150px;
+    background: linear-gradient(135deg, #1f2937, #374151);
+    border-radius: 12px;
+    border: 2px solid #4f46e5;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    cursor: grab;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    will-change: transform;
+}
+
+#webcam-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 15px 35px rgba(79, 70, 229, 0.2);
+}
+
+#webcam-container:active {
+    cursor: grabbing;
+    transform: scale(0.98);
+}
+
+#user-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #1f2937;
+}
+
+.webcam-controls {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1001;
+    gap: 8px;
+}
+
+.webcam-control-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(31, 41, 55, 0.8);
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.webcam-control-btn:hover {
+    background: rgba(79, 70, 229, 0.8);
+    transform: scale(1.1);
+}
+
+.webcam-control-btn.off {
+    background: rgba(239, 68, 68, 0.8);
+    color: #ffffff;
+}
+
+.webcam-control-btn.off:hover {
+    background: rgba(220, 38, 38, 0.9);
+}
+
+/* ============================================
+ * RECORDING BUTTON
+ * ============================================ */
+
+.record-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+}
+
+.record-btn {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+    min-width: 140px;
+    width: auto;
+}
+
+.record-btn:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.5);
+}
+
+.record-btn.recording {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+    animation: recordingPulse 1.5s infinite;
+}
+
+.record-btn.recording:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
+@keyframes recordingPulse {
+    0%, 100% { 
+        box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3); 
+    }
+    50% { 
+        box-shadow: 0 6px 24px rgba(239, 68, 68, 0.6); 
+    }
+}
+
+.record-btn i {
+    font-size: 14px;
+}
+
+#record-text {
+    font-size: 14px;
+}
+
+/* ============================================
+ * STOP SPEAKING BUTTON
+ * ============================================ */
+
+.stop-btn {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+.stop-btn.active {
+    display: flex;
+    animation: stopPulse 1s infinite;
+}
+
+@keyframes stopPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.stop-btn:hover {
+    background: linear-gradient(135deg, #b91c1c, #991b1b);
+    transform: translateY(-2px);
+}
+
+/* ============================================
+ * SEND MESSAGE BUTTON
+ * ============================================ */
+
+.send-btn {
+    background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+    color: white;
+    border: none;
+    padding: 16px 28px;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 15px;
+    box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);
+}
+
+.send-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(168, 85, 247, 0.5);
+}
+
+.send-btn:active {
+    transform: translateY(-1px);
+}
+
+/* ============================================
+ * MESSAGE INPUT
+ * ============================================ */
+
+.message-input {
+    flex: 1;
+    background: #0f172a;
+    border: 2px solid #334155;
+    border-radius: 14px;
+    padding: 16px 20px;
+    color: white;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.message-input:focus {
+    border-color: #a855f7;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+}
+
+.message-input::placeholder {
+    color: #64748b;
+}
+
+/* ============================================
+ * CHAT MESSAGES
+ * ============================================ */
+
+.message-wrapper {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 18px;
+    animation: messageSlideIn 0.4s ease;
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);
+}
+
+.message-wrapper.user .message-avatar {
+    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+.message-bubble {
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 16px 20px;
+    color: white;
+    max-width: 75%;
+    word-wrap: break-word;
+    line-height: 1.7;
+    font-size: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.message-wrapper.user .message-bubble {
+    background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+    margin-left: auto;
+    box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
+}
+
+/* ============================================
+ * TYPING INDICATOR
+ * ============================================ */
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 16px 20px;
+    background: #1e293b;
+    border-radius: 16px;
+    opacity: 0;
+    animation: typingSlideIn 0.3s ease forwards;
+}
+
+.typing-indicator.active {
+    opacity: 1;
+}
+
+@keyframes typingSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.typing-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #94a3b8;
+    animation: typingBounce 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typingBounce {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.6;
+    }
+    30% {
+        transform: translateY(-12px);
+        opacity: 1;
+    }
+}
+
+/* ============================================
+ * ✅ NEW: WHITEBOARD PANEL (RIGHT SIDE)
+ * ============================================ */
+
+.whiteboard-panel {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 60%;
+    height: 100vh;
+    background: #1e293b;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+    transition: right 0.4s ease;
+}
+
+.whiteboard-panel.active {
+    right: 0;
+}
+
+.whiteboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #0f172a;
+    border-bottom: 2px solid #334155;
+}
+
+.whiteboard-header h3 {
+    color: white;
+    font-size: 20px;
+    margin: 0;
+}
+
+.close-panel-btn {
+    background: rgba(239, 68, 68, 0.2);
+    border: none;
+    color: #ef4444;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.close-panel-btn:hover {
+    background: #ef4444;
+    color: white;
+    transform: rotate(90deg);
+}
+
+.whiteboard-toolbar {
+    display: flex;
+    gap: 12px;
+    padding: 12px 20px;
+    background: #0f172a;
+    border-bottom: 1px solid #334155;
+    flex-wrap: wrap;
+}
+
+.tool-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 0 12px;
+    border-right: 1px solid #334155;
+}
+
+.tool-group:last-child {
+    border-right: none;
+}
+
+.tool-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.tool-btn:hover {
+    background: rgba(168, 85, 247, 0.3);
+    border-color: #a855f7;
+    transform: translateY(-2px);
+}
+
+.tool-btn.active {
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    border-color: #a855f7;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+}
+
+.color-picker-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#pen-color {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.color-indicator {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #000000;
+    border: 2px solid white;
+}
+
+.width-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#pen-width {
+    width: 100px;
+}
+
+#width-display {
+    color: white;
+    font-size: 12px;
+    min-width: 35px;
+}
+
+.whiteboard-canvas-wrapper {
+    flex: 1;
+    overflow: auto;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+#whiteboard-canvas {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    cursor: crosshair;
+    touch-action: none;
+}
+
+/* ============================================
+ * ✅ NEW: NOTES PANEL (RIGHT SIDE)
+ * ============================================ */
+
+.notes-panel {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 60%;
+    height: 100vh;
+    background: #1e293b;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+    transition: right 0.4s ease;
+}
+
+.notes-panel.active {
+    right: 0;
+}
+
+.notes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #0f172a;
+    border-bottom: 2px solid #334155;
+}
+
+.notes-header h3 {
+    color: white;
+    font-size: 20px;
+    margin: 0;
+}
+
+.notes-toolbar {
+    display: flex;
+    gap: 12px;
+    padding: 12px 20px;
+    background: #0f172a;
+    border-bottom: 1px solid #334155;
+    flex-wrap: wrap;
+}
+
+.notes-editor-wrapper {
+    flex: 1;
+    overflow: auto;
+    padding: 20px;
+    background: #ffffff;
+}
+
+.notes-editor {
+    width: 100%;
+    min-height: 100%;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #1f2937;
+    outline: none;
+}
+
+.notes-editor:focus {
+    outline: 2px solid #a855f7;
+    outline-offset: 2px;
+}
+
+/* ============================================
+ * DROPDOWN MENU
+ * ============================================ */
+
+.menu-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 10px 16px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.menu-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    padding: 8px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+    min-width: 220px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.dropdown-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.menu-item {
+    padding: 14px 18px;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.menu-item:hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(236, 72, 153, 0.2));
+    transform: translateX(5px);
+}
+
+/* ============================================
+ * RESIZER
+ * ============================================ */
+
+.resizer {
+    width: 6px;
+    background: #334155;
+    cursor: ew-resize;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 100;
+}
+
+.resizer:hover {
+    background: linear-gradient(to right, #a855f7, #ec4899);
+    width: 8px;
+}
+
+.resizer.resizing {
+    background: linear-gradient(to right, #a855f7, #ec4899);
+    width: 10px;
+}
+
+/* ============================================
+ * SCROLLBAR STYLING
+ * ============================================ */
+
+.overflow-y-auto::-webkit-scrollbar,
+.messages-area::-webkit-scrollbar {
+    width: 10px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track,
+.messages-area::-webkit-scrollbar-track {
+    background: #0f172a;
+    border-radius: 10px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb,
+.messages-area::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    border-radius: 10px;
+    border: 2px solid #0f172a;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover,
+.messages-area::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #9333ea, #db2777);
+}
+
+/* ============================================
+ * RESPONSIVE DESIGN
+ * ============================================ */
+
+@media (max-width: 1024px) {
+    #webcam-container {
+        width: 160px;
+        height: 120px;
+    }
+    
+    .whiteboard-panel,
+    .notes-panel {
+        width: 80%;
+    }
+}
+
+@media (max-width: 768px) {
+    #webcam-container {
+        width: 150px;
+        height: 112px;
+        top: 10px;
+        right: 10px;
+    }
+    
+    .webcam-control-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    
+    .record-btn {
+        min-width: 120px;
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+    
+    .record-btn i {
+        font-size: 12px;
+    }
+    
+    .message-bubble {
+        max-width: 90%;
+    }
+    
+    .whiteboard-panel,
+    .notes-panel {
+        width: 100%;
+    }
+    
+    .whiteboard-toolbar,
+    .notes-toolbar {
+        flex-direction: column;
+    }
+    
+    .tool-group {
+        border-right: none;
+        border-bottom: 1px solid #334155;
+        padding: 8px 0;
+    }
+}
+
+/* ============================================
+ * UTILITY ANIMATIONS
+ * ============================================ */
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+.shadow-glow {
+    box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+}
+
+/* ============================================
+ * LOADING STATES
+ * ============================================ */
+
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #4f46e5;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

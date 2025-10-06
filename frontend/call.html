@@ -3,12 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YoLearn.ai - Learning Session</title>
+    <title>YoLearn.ai - Learning Session v5.0</title>
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./assets/css/styles.css">
+    
+    <!-- Font Awesome for Professional Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- External Styles -->
+    <link rel="stylesheet" href="./assets/css/call-styles.css">
+    
     <style>
         /* ============================================
-           COMPLETE STYLING - 650+ LINES
+           EMBEDDED STYLES v5.0
+           ✅ Right-side panels (not full-screen)
+           ✅ Better avatar animations
+           ✅ 5 tutors (not 6)
            ============================================ */
         
         * { 
@@ -23,20 +34,12 @@
             background: #0f172a;
         }
         
-        /* ============================================
-           MAIN CONTAINER - RESIZABLE LAYOUT
-           ============================================ */
-        
         .main-container {
             display: flex;
             height: 100vh;
             background: #0f172a;
             position: relative;
         }
-        
-        /* ============================================
-           LEFT PANEL - AVATAR + VIDEO (RESIZABLE)
-           ============================================ */
         
         .left-panel {
             width: 40%;
@@ -49,10 +52,6 @@
             border-right: 2px solid #334155;
             transition: width 0.1s ease;
         }
-        
-        /* ============================================
-           RESIZER BAR (DRAGGABLE DIVIDER)
-           ============================================ */
         
         .resizer {
             width: 6px;
@@ -86,10 +85,6 @@
             background: linear-gradient(to right, #a855f7, #ec4899);
             width: 10px;
         }
-        
-        /* ============================================
-           TUTOR HEADER
-           ============================================ */
         
         .tutor-header {
             padding: 20px;
@@ -169,10 +164,6 @@
             }
         }
         
-        /* ============================================
-           ROOM INFO BAR
-           ============================================ */
-        
         .room-info {
             padding: 12px 20px;
             background: rgba(0, 0, 0, 0.2);
@@ -220,10 +211,6 @@
             color: white;
         }
         
-        /* ============================================
-           AVATAR DISPLAY AREA
-           ============================================ */
-        
         .avatar-display {
             flex: 1;
             position: relative;
@@ -244,32 +231,81 @@
             height: 100% !important;
         }
         
-        /* ============================================
-           USER VIDEO (WEBCAM)
-           ============================================ */
-        
-        #user-video {
-            position: absolute;
-            bottom: 110px;
+        #webcam-container {
+            position: fixed;
+            top: 20px;
             right: 20px;
             width: 200px;
             height: 150px;
-            border-radius: 16px;
-            border: 3px solid #a855f7;
-            object-fit: cover;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-            z-index: 20;
+            background: linear-gradient(135deg, #1f2937, #374151);
+            border-radius: 12px;
+            border: 2px solid #4f46e5;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            cursor: grab;
             transition: all 0.3s ease;
+            overflow: hidden;
         }
         
-        #user-video:hover {
-            transform: scale(1.05);
-            border-color: #ec4899;
+        #webcam-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 35px rgba(79, 70, 229, 0.2);
         }
         
-        /* ============================================
-           RECORDING CONTROLS
-           ============================================ */
+        #webcam-container:active {
+            cursor: grabbing;
+            transform: scale(0.98);
+        }
+        
+        #user-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            background: #1f2937;
+        }
+        
+        .webcam-controls {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1001;
+            gap: 8px;
+        }
+        
+        .webcam-control-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(31, 41, 55, 0.8);
+            color: #ffffff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .webcam-control-btn:hover {
+            background: rgba(79, 70, 229, 0.8);
+            transform: scale(1.1);
+        }
+        
+        .webcam-control-btn.off {
+            background: rgba(239, 68, 68, 0.8);
+            color: #ffffff;
+        }
+        
+        .webcam-control-btn.off:hover {
+            background: rgba(220, 38, 38, 0.9);
+        }
         
         .record-controls {
             position: absolute;
@@ -277,58 +313,53 @@
             left: 20px;
             right: 20px;
             z-index: 20;
+            display: flex;
+            justify-content: center;
         }
         
         .record-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            width: auto;
+            min-width: 140px;
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
-            padding: 16px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 700;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 8px;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
         }
         
         .record-btn:hover {
-            background: linear-gradient(135deg, #b91c1c, #991b1b);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(220, 38, 38, 0.5);
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.5);
         }
         
         .record-btn.recording {
-            background: linear-gradient(135deg, #16a34a, #15803d);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
             animation: recordPulse 1.5s infinite;
         }
         
+        .record-btn.recording:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+        }
+        
         @keyframes recordPulse {
-            0%, 100% { box-shadow: 0 8px 20px rgba(22, 163, 74, 0.3); }
-            50% { box-shadow: 0 8px 40px rgba(22, 163, 74, 0.6); }
+            0%, 100% { box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3); }
+            50% { box-shadow: 0 6px 24px rgba(239, 68, 68, 0.6); }
         }
         
-        .record-dot {
-            width: 14px;
-            height: 14px;
-            background: white;
-            border-radius: 50%;
-            animation: dotPulse 1s infinite;
+        .record-btn i {
+            font-size: 14px;
         }
-        
-        @keyframes dotPulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.7; }
-        }
-        
-        /* ============================================
-           RIGHT PANEL - CHAT AREA
-           ============================================ */
         
         .right-panel {
             flex: 1;
@@ -337,10 +368,6 @@
             background: #0f172a;
             min-width: 400px;
         }
-        
-        /* ============================================
-           CHAT HEADER
-           ============================================ */
         
         .chat-header {
             padding: 20px;
@@ -373,10 +400,6 @@
             gap: 12px;
             align-items: center;
         }
-        
-        /* ============================================
-           STOP SPEAKING BUTTON (NEW!)
-           ============================================ */
         
         .stop-btn {
             background: linear-gradient(135deg, #dc2626, #b91c1c);
@@ -443,10 +466,6 @@
             box-shadow: 0 8px 20px rgba(220, 38, 38, 0.4);
         }
         
-        /* ============================================
-           DROPDOWN MENU
-           ============================================ */
-        
         .dropdown-menu {
             position: absolute;
             top: 80px;
@@ -494,10 +513,6 @@
             background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(236, 72, 153, 0.2));
             transform: translateX(5px);
         }
-        
-        /* ============================================
-           MESSAGES AREA
-           ============================================ */
         
         .messages-area {
             flex: 1;
@@ -566,10 +581,6 @@
             box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
         }
         
-        /* ============================================
-           TYPING INDICATOR
-           ============================================ */
-        
         .typing-indicator {
             display: none;
             padding: 16px 20px;
@@ -605,10 +616,6 @@
             }
         }
         
-        /* ============================================
-           INPUT AREA
-           ============================================ */
-        
         .input-area {
             padding: 20px;
             background: #1e293b;
@@ -642,34 +649,6 @@
             color: #64748b;
         }
         
-        .voice-btn {
-            background: linear-gradient(135deg, #7c3aed, #6d28d9);
-            border: none;
-            padding: 16px 22px;
-            border-radius: 14px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 20px;
-        }
-        
-        .voice-btn:hover {
-            background: linear-gradient(135deg, #6d28d9, #5b21b6);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
-        }
-        
-        .voice-btn.active {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
-            animation: voicePulse 1s infinite;
-        }
-        
-        @keyframes voicePulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
-            50% { box-shadow: 0 0 0 15px rgba(220, 38, 38, 0); }
-        }
-        
         .send-btn {
             background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
             border: none;
@@ -692,10 +671,6 @@
             transform: translateY(-1px);
         }
         
-        /* ============================================
-           SCROLLBAR STYLING
-           ============================================ */
-        
         .messages-area::-webkit-scrollbar {
             width: 10px;
         }
@@ -715,17 +690,13 @@
             background: linear-gradient(135deg, #9333ea, #db2777);
         }
         
-        /* ============================================
-           RESPONSIVE DESIGN
-           ============================================ */
-        
         @media (max-width: 1024px) {
             .left-panel {
                 width: 35%;
                 min-width: 280px;
             }
             
-            #user-video {
+            #webcam-container {
                 width: 160px;
                 height: 120px;
             }
@@ -750,14 +721,31 @@
                 height: 50vh;
                 min-width: 100%;
             }
+            
+            #webcam-container {
+                width: 150px;
+                height: 112px;
+                top: 10px;
+                right: 10px;
+            }
+            
+            .webcam-control-btn {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+            
+            .record-btn {
+                min-width: 120px;
+                padding: 10px 16px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="main-container">
-        <!-- ============================================
-             LEFT PANEL - AVATAR + VIDEO
-             ============================================ -->
+        <!-- LEFT PANEL - AVATAR + VIDEO -->
         <div class="left-panel" id="left-panel">
             <!-- Tutor Header -->
             <div class="tutor-header">
@@ -787,35 +775,45 @@
             <!-- 3D Avatar Display -->
             <div class="avatar-display">
                 <div id="avatar-container"></div>
-                <video id="user-video" autoplay muted playsinline></video>
+                
+                <!-- Draggable Webcam Container -->
+                <div id="webcam-container">
+                    <video id="user-video" autoplay muted playsinline></video>
+                    
+                    <!-- Camera/Mic Controls -->
+                    <div class="webcam-controls">
+                        <button class="webcam-control-btn" id="camera-btn" onclick="toggleCamera()" title="Toggle Camera">
+                            <i class="fas fa-video"></i>
+                        </button>
+                        <button class="webcam-control-btn" id="mic-btn" onclick="toggleMic()" title="Toggle Mic">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
             
             <!-- Recording Controls -->
             <div class="record-controls">
                 <button class="record-btn" id="record-btn" onclick="toggleRecording()">
-                    <span class="record-dot"></span>
-                    <span id="record-text">Start Recording</span>
+                    <i class="fas fa-circle"></i>
+                    <span id="record-text">Record</span>
                 </button>
             </div>
         </div>
         
-        <!-- ============================================
-             RESIZER BAR (DRAGGABLE)
-             ============================================ -->
+        <!-- RESIZER BAR -->
         <div class="resizer" id="resizer"></div>
         
-        <!-- ============================================
-             RIGHT PANEL - CHAT
-             ============================================ -->
+        <!-- RIGHT PANEL - CHAT -->
         <div class="right-panel">
             <!-- Chat Header -->
             <div class="chat-header">
                 <div class="chat-title">
                     <h3>💬 Live Chat</h3>
-                    <span class="chat-subtitle">Ask anything, get instant answers</span>
+                    <span class="chat-subtitle">Speak naturally - continuous voice recognition enabled</span>
                 </div>
                 <div class="header-actions">
-                    <!-- STOP SPEAKING BUTTON (NEW!) -->
+                    <!-- Stop Speaking Button -->
                     <button class="stop-btn" id="stop-btn" onclick="stopSpeaking()">
                         🛑 Stop Speaking
                     </button>
@@ -857,13 +855,10 @@
                         type="text" 
                         class="message-input" 
                         id="message-input" 
-                        placeholder="Type your question here..."
+                        placeholder="Speak or type your question..."
                         onkeypress="if(event.key==='Enter') sendMessage()"
                     >
-                    <button class="voice-btn" id="voice-btn" onclick="toggleVoice()">
-                        🎤
-                    </button>
-                    <button class="send-btn" onclick="sendMessage()">
+                    <button class="send-btn" id="send-btn" onclick="sendMessage()">
                         Send 🚀
                     </button>
                 </div>
@@ -871,9 +866,138 @@
         </div>
     </div>
 
+    <!-- ============================================
+         ✅ WHITEBOARD PANEL (RIGHT SIDE - NOT MODAL)
+         ============================================ -->
+    <div class="whiteboard-panel" id="whiteboard-panel">
+        <div class="whiteboard-header">
+            <h3>📝 Whiteboard</h3>
+            <button class="close-panel-btn" onclick="closeWhiteboard()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <!-- Whiteboard Toolbar -->
+        <div class="whiteboard-toolbar">
+            <div class="tool-group">
+                <button class="tool-btn active" data-tool="pen" title="Pen">
+                    <i class="fas fa-pen"></i>
+                </button>
+                <button class="tool-btn" data-tool="eraser" title="Eraser">
+                    <i class="fas fa-eraser"></i>
+                </button>
+                <button class="tool-btn" data-tool="line" title="Line">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button class="tool-btn" data-tool="rectangle" title="Rectangle">
+                    <i class="far fa-square"></i>
+                </button>
+                <button class="tool-btn" data-tool="circle" title="Circle">
+                    <i class="far fa-circle"></i>
+                </button>
+            </div>
+            
+            <div class="tool-group">
+                <div class="color-picker-wrapper">
+                    <input type="color" id="pen-color" value="#000000">
+                    <span id="color-indicator" class="color-indicator"></span>
+                </div>
+                <div class="width-selector">
+                    <input type="range" id="pen-width" min="1" max="20" value="3">
+                    <span id="width-display">3px</span>
+                </div>
+            </div>
+            
+            <div class="tool-group">
+                <button class="tool-btn" id="undo-btn" title="Undo">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button class="tool-btn" id="redo-btn" title="Redo">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button class="tool-btn" id="clear-canvas" title="Clear All">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button class="tool-btn" id="download-canvas" title="Download">
+                    <i class="fas fa-download"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Canvas Container -->
+        <div id="whiteboard-container" class="whiteboard-canvas-wrapper">
+            <canvas id="whiteboard-canvas"></canvas>
+        </div>
+    </div>
+
+    <!-- ============================================
+         ✅ NOTES PANEL (RIGHT SIDE - NOT MODAL)
+         ============================================ -->
+    <div class="notes-panel" id="notes-panel">
+        <div class="notes-header">
+            <h3>📄 Notes</h3>
+            <button class="close-panel-btn" onclick="closeNotes()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <!-- Notes Toolbar -->
+        <div class="notes-toolbar">
+            <div class="tool-group">
+                <button class="tool-btn" id="bold-btn" title="Bold (Ctrl+B)">
+                    <i class="fas fa-bold"></i>
+                </button>
+                <button class="tool-btn" id="italic-btn" title="Italic (Ctrl+I)">
+                    <i class="fas fa-italic"></i>
+                </button>
+                <button class="tool-btn" id="underline-btn" title="Underline (Ctrl+U)">
+                    <i class="fas fa-underline"></i>
+                </button>
+            </div>
+            
+            <div class="tool-group">
+                <button class="tool-btn" id="bullet-btn" title="Bullet List">
+                    <i class="fas fa-list-ul"></i>
+                </button>
+                <button class="tool-btn" id="number-btn" title="Numbered List">
+                    <i class="fas fa-list-ol"></i>
+                </button>
+                <button class="tool-btn" id="heading-btn" title="Heading">
+                    <i class="fas fa-heading"></i>
+                </button>
+            </div>
+            
+            <div class="tool-group">
+                <button class="tool-btn" id="clear-format-btn" title="Clear Format">
+                    <i class="fas fa-remove-format"></i>
+                </button>
+                <button class="tool-btn" id="save-notes-btn" title="Save (Ctrl+S)">
+                    <i class="fas fa-save"></i>
+                </button>
+                <button class="tool-btn" id="export-notes-btn" title="Export">
+                    <i class="fas fa-file-download"></i>
+                </button>
+                <button class="tool-btn" id="ai-summary-btn" title="AI Summary">
+                    <i class="fas fa-magic"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Notes Editor -->
+        <div class="notes-editor-wrapper">
+            <div id="notes-editor" class="notes-editor" contenteditable="true"></div>
+        </div>
+    </div>
+
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    
+    <!-- Whiteboard & Notes Scripts -->
+    <script src="./assets/js/whiteboard.js"></script>
+    <script src="./assets/js/notes.js"></script>
+    
+    <!-- Main Call Script -->
     <script src="./assets/js/call.js"></script>
 </body>
 </html>

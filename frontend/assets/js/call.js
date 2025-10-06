@@ -1,24 +1,22 @@
 /**
- * YoLearn.ai v2.0 - Call.js
- * Complete JavaScript for Learning Session
- * Features: 3D Avatar, Voice Control, Resizable Panels, Animations
- * FIXED: All errors resolved, production-ready
+ * YoLearn.ai v5.1 - Call.js
+ * ✅ FIXED: No more scary arm movements!
+ * ✅ Natural animations: mouth + subtle head movement ONLY
  */
 
 // ============================================
 // ENVIRONMENT DETECTION & API CONFIGURATION
 // ============================================
 
-// Detect environment FIRST (before any code uses it)
 const isDevelopment = window.location.hostname === 'localhost' || 
                       window.location.hostname === '127.0.0.1' ||
                       window.location.hostname.includes('192.168');
 
-// Avatar and API URLs
-const AVATAR_URL = 'https://models.readyplayer.me/68e3549ab7446b1aad116ab5.glb';
-const API_URL = isDevelopment 
-    ? 'http://localhost:5000/api/chat'  // Local development
-    : 'https://ai-tutor-platform-7vte.onrender.com/api/chat';  // Production (Render)
+const API_BASE_URL = isDevelopment 
+    ? 'http://localhost:5000'
+    : 'https://ai-tutor-platform-7vte.onrender.com';
+
+const API_URL = `${API_BASE_URL}/api/chat`;
 
 console.log('🌍 Environment:', isDevelopment ? 'Development' : 'Production');
 console.log('🔗 API URL:', API_URL);
@@ -30,43 +28,80 @@ console.log('🔗 API URL:', API_URL);
 let scene, camera, renderer, avatar, mixer, clock;
 let isListening = false;
 let recognition;
-let currentTutor = { name: 'Alex', specialty: 'Math, Science & Technology Expert', emoji: '👨‍🏫' };
-let currentUtterance = null; // For speech control
+let isContinuousListening = true;
+let currentTutor = { 
+    name: 'Alex', 
+    specialty: 'Math, Science & Technology Expert', 
+    emoji: '👨‍🏫',
+    avatarUrl: 'https://models.readyplayer.me/68e3549ab7446b1aad116ab5.glb',
+    voiceGender: 'male',
+    voicePitch: 1.0,
+    voiceRate: 1.0
+};
+let currentUtterance = null;
 let isSpeaking = false;
-let avatarHead = null; // For mouth animation
+
+// ✅ SIMPLIFIED: Only head for animations
+let avatarHead = null;
 let morphTargetInfluences = null;
+
+// Webcam
+let isCameraOn = true;
+let isMicOn = true;
+let webcamStream = null;
+
+// Recording
+let displayStream = null;
+let audioContext = null;
+let destination = null;
+let mediaRecorder, recordedChunks = [], isRecording = false;
 
 // ============================================
 // INITIALIZE ON PAGE LOAD
 // ============================================
-window.addEventListener('DOMContentLoaded', () => {
-    console.log('✅ YoLearn.ai initialized successfully!');
-    loadTutorInfo();
+window.addEventListener('DOMContentLoaded', async () => {
+    console.log('✅ YoLearn.ai v5.1 initialized!');
+    await loadTutorInfo();
     init3DAvatar();
     startWebcam();
     startTimer();
     setupVoiceRecognition();
-    initResizer(); // Resizable panels
+    initResizer();
+    initDraggableWebcam();
 });
 
 // ============================================
 // LOAD TUTOR INFORMATION
 // ============================================
-function loadTutorInfo() {
+async function loadTutorInfo() {
     const tutor = JSON.parse(sessionStorage.getItem('currentTutor') || '{}');
     const roomId = sessionStorage.getItem('currentRoomId') || 'room_' + Date.now();
     
-    if (tutor.name) {
-        currentTutor = tutor;
-        document.getElementById('tutor-name').textContent = tutor.name;
-        document.getElementById('tutor-specialty').textContent = tutor.specialty;
-        document.getElementById('tutor-emoji').textContent = tutor.emoji;
-        document.getElementById('tutor-emoji-msg').textContent = tutor.emoji;
+    if (tutor.name && tutor.id) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/tutors/${tutor.id}`);
+            const data = await response.json();
+            
+            if (data.success && data.tutor) {
+                currentTutor = data.tutor;
+                console.log('✅ Tutor loaded:', currentTutor.name);
+            } else {
+                currentTutor = tutor;
+            }
+        } catch (error) {
+            console.error('❌ Error loading tutor:', error);
+            currentTutor = tutor;
+        }
+        
+        document.getElementById('tutor-name').textContent = currentTutor.name;
+        document.getElementById('tutor-specialty').textContent = currentTutor.specialty;
+        document.getElementById('tutor-emoji').textContent = currentTutor.emoji;
+        document.getElementById('tutor-emoji-msg').textContent = currentTutor.emoji;
         document.getElementById('welcome-msg').textContent = 
-            `Hello! I'm ${tutor.name}, specializing in ${tutor.specialty}. What would you like to learn?`;
+            `Hello! I'm ${currentTutor.name}, specializing in ${currentTutor.specialty}. What would you like to learn?`;
     }
+    
     document.getElementById('room-id').textContent = roomId;
-    console.log('✅ Tutor info loaded:', currentTutor.name);
 }
 
 // ============================================
@@ -75,6 +110,9 @@ function loadTutorInfo() {
 function initResizer() {
     const resizer = document.getElementById('resizer');
     const leftPanel = document.getElementById('left-panel');
+    
+    if (!resizer || !leftPanel) return;
+    
     let isResizing = false;
     let startX = 0;
     let startWidth = 0;
@@ -95,14 +133,12 @@ function initResizer() {
         const newWidth = startWidth + deltaX;
         const containerWidth = window.innerWidth;
         
-        // Limit width between 25% and 70%
         const minWidth = containerWidth * 0.25;
         const maxWidth = containerWidth * 0.70;
         
         if (newWidth >= minWidth && newWidth <= maxWidth) {
             leftPanel.style.width = `${newWidth}px`;
             
-            // Update renderer size
             if (renderer && camera) {
                 const container = document.getElementById('avatar-container');
                 camera.aspect = container.clientWidth / container.clientHeight;
@@ -123,16 +159,112 @@ function initResizer() {
 }
 
 // ============================================
-// 3D AVATAR WITH THREE.JS + ANIMATIONS
+// DRAGGABLE WEBCAM
+// ============================================
+function initDraggableWebcam() {
+    const webcamContainer = document.getElementById('webcam-container');
+    if (!webcamContainer) return;
+    
+    let isDragging = false;
+    let currentX = 0;
+    let currentY = 0;
+    let initialX = 0;
+    let initialY = 0;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    webcamContainer.addEventListener('mousedown', dragStart, { passive: false });
+    document.addEventListener('mousemove', drag, { passive: false });
+    document.addEventListener('mouseup', dragEnd);
+
+    function dragStart(e) {
+        if (e.target.classList.contains('webcam-control-btn')) return;
+        
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+        isDragging = true;
+        webcamContainer.style.cursor = 'grabbing';
+        webcamContainer.style.willChange = 'transform';
+    }
+
+    function drag(e) {
+        if (!isDragging) return;
+        
+        e.preventDefault();
+        
+        requestAnimationFrame(() => {
+            currentX = e.clientX - initialX;
+            currentY = e.clientY - initialY;
+            xOffset = currentX;
+            yOffset = currentY;
+            
+            webcamContainer.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+        });
+    }
+
+    function dragEnd() {
+        isDragging = false;
+        webcamContainer.style.cursor = 'grab';
+        webcamContainer.style.willChange = 'auto';
+    }
+}
+
+// ============================================
+// CAMERA & MIC TOGGLES
+// ============================================
+function toggleCamera() {
+    const video = document.getElementById('user-video');
+    const cameraBtn = document.getElementById('camera-btn');
+    
+    if (!video || !webcamStream) return;
+    
+    isCameraOn = !isCameraOn;
+    
+    webcamStream.getVideoTracks().forEach(track => {
+        track.enabled = isCameraOn;
+    });
+    
+    if (cameraBtn) {
+        cameraBtn.innerHTML = isCameraOn 
+            ? '<i class="fas fa-video"></i>' 
+            : '<i class="fas fa-video-slash"></i>';
+        cameraBtn.classList.toggle('off', !isCameraOn);
+    }
+    
+    console.log('📹 Camera:', isCameraOn ? 'ON' : 'OFF');
+}
+
+function toggleMic() {
+    const micBtn = document.getElementById('mic-btn');
+    
+    if (!webcamStream) return;
+    
+    isMicOn = !isMicOn;
+    
+    webcamStream.getAudioTracks().forEach(track => {
+        track.enabled = isMicOn;
+    });
+    
+    if (micBtn) {
+        micBtn.innerHTML = isMicOn 
+            ? '<i class="fas fa-microphone"></i>' 
+            : '<i class="fas fa-microphone-slash"></i>';
+        micBtn.classList.toggle('off', !isMicOn);
+    }
+    
+    console.log('🎤 Mic:', isMicOn ? 'ON' : 'OFF');
+}
+
+// ============================================
+// ✅ FIXED: 3D AVATAR WITH NATURAL ANIMATIONS
 // ============================================
 function init3DAvatar() {
     const container = document.getElementById('avatar-container');
+    if (!container) return;
     
-    // Scene setup
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x1e293b);
     
-    // Camera setup
     camera = new THREE.PerspectiveCamera(
         35, 
         container.clientWidth / container.clientHeight, 
@@ -142,7 +274,6 @@ function init3DAvatar() {
     camera.position.set(0, 1.6, 2.5);
     camera.lookAt(0, 1.5, 0);
     
-    // Renderer setup
     renderer = new THREE.WebGLRenderer({ 
         antialias: true,
         alpha: true
@@ -152,7 +283,6 @@ function init3DAvatar() {
     renderer.shadowMap.enabled = true;
     container.appendChild(renderer.domElement);
     
-    // Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
     
@@ -165,84 +295,102 @@ function init3DAvatar() {
     fillLight.position.set(-2, 1, -1);
     scene.add(fillLight);
     
-    // Load avatar
     const loader = new THREE.GLTFLoader();
-    console.log('🔄 Loading avatar from:', AVATAR_URL);
+    const avatarURL = currentTutor.avatarUrl || 'https://models.readyplayer.me/68e3549ab7446b1aad116ab5.glb';
+    
+    console.log('🔄 Loading avatar from:', avatarURL);
     
     loader.load(
-        AVATAR_URL,
+        avatarURL,
         (gltf) => {
             avatar = gltf.scene;
             avatar.position.set(0, 0, 0);
             avatar.scale.set(1, 1, 1);
             scene.add(avatar);
             
-            // Find head for mouth animation
+            // ✅ ONLY find head and morph targets - NO ARMS!
             avatar.traverse((node) => {
+                // Facial expressions only
                 if (node.isMesh && node.morphTargetInfluences) {
-                    avatarHead = node;
                     morphTargetInfluences = node.morphTargetInfluences;
-                    console.log('✅ Found morph targets:', node.morphTargetDictionary);
+                    console.log('✅ Morph targets found:', node.morphTargetInfluences.length);
+                }
+                
+                // Head bone for subtle nods
+                if (node.isBone && node.name.toLowerCase().includes('head')) {
+                    avatarHead = node;
+                    console.log('✅ Head bone found');
                 }
             });
             
-            // Setup animations
             if (gltf.animations && gltf.animations.length) {
                 mixer = new THREE.AnimationMixer(avatar);
                 const action = mixer.clipAction(gltf.animations[0]);
                 action.play();
-                console.log('✅ Animations loaded:', gltf.animations.length);
+                console.log('✅ Animations loaded');
             }
             
             console.log('✅ Avatar loaded successfully!');
         },
         (progress) => {
             const percent = (progress.loaded / progress.total * 100).toFixed(0);
-            console.log(`⏳ Loading avatar: ${percent}%`);
+            console.log(`⏳ Loading: ${percent}%`);
         },
         (error) => {
-            console.error('❌ Avatar loading error:', error);
+            console.error('❌ Avatar error:', error);
         }
     );
     
-    // Animation clock
     clock = new THREE.Clock();
     
-    // Render loop
+    // ✅ FIXED RENDER LOOP
     function animate() {
         requestAnimationFrame(animate);
         
         const delta = clock.getDelta();
         
-        // Update mixer
         if (mixer) mixer.update(delta);
         
-        // Idle animation (gentle sway)
+        // ✅ IDLE: Very subtle breathing only
         if (avatar && !isSpeaking) {
-            const time = Date.now() * 0.0005;
-            avatar.rotation.y = Math.sin(time) * 0.05;
-            avatar.position.y = Math.sin(time * 2) * 0.01;
+            const time = Date.now() * 0.0002;
+            avatar.position.y = Math.sin(time * 2) * 0.005; // Tiny breathing
         }
         
-        // Mouth animation while speaking
-        if (isSpeaking && morphTargetInfluences) {
-            const time = Date.now() * 0.01;
-            const openAmount = (Math.sin(time) + 1) * 0.3; // 0 to 0.6
+        // ✅ SPEAKING: Mouth + tiny head nod ONLY
+        if (isSpeaking) {
+            const time = Date.now() * 0.008;
             
-            // Animate mouth open morph target (usually index 0)
-            if (morphTargetInfluences.length > 0) {
+            // Mouth animation
+            if (morphTargetInfluences && morphTargetInfluences.length > 0) {
+                const openAmount = (Math.sin(time * 2) + 1) * 0.25;
                 morphTargetInfluences[0] = openAmount;
             }
-        } else if (morphTargetInfluences && morphTargetInfluences.length > 0) {
+            
+            // Tiny head nod
+            if (avatarHead) {
+                avatarHead.rotation.x = Math.sin(time * 0.5) * 0.03; // Very small
+                avatarHead.rotation.y = Math.sin(time * 0.3) * 0.02; // Very small
+            }
+        } else {
             // Close mouth when not speaking
-            morphTargetInfluences[0] = 0;
+            if (morphTargetInfluences && morphTargetInfluences.length > 0) {
+                for (let i = 0; i < morphTargetInfluences.length; i++) {
+                    morphTargetInfluences[i] *= 0.95; // Smooth fade
+                }
+            }
+            
+            // Reset head
+            if (avatarHead) {
+                avatarHead.rotation.x *= 0.95;
+                avatarHead.rotation.y *= 0.95;
+            }
         }
         
         renderer.render(scene, camera);
     }
     animate();
     
-    // Handle window resize
     window.addEventListener('resize', () => {
         const newWidth = container.clientWidth;
         const newHeight = container.clientHeight;
@@ -258,11 +406,16 @@ function init3DAvatar() {
 // ============================================
 async function startWebcam() {
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({ 
+        webcamStream = await navigator.mediaDevices.getUserMedia({ 
             video: { width: 200, height: 150 }, 
-            audio: false 
+            audio: true
         });
-        document.getElementById('user-video').srcObject = stream;
+        
+        const video = document.getElementById('user-video');
+        if (video) {
+            video.srcObject = webcamStream;
+        }
+        
         console.log('✅ Webcam started');
     } catch(error) {
         console.error('❌ Webcam error:', error);
@@ -279,7 +432,8 @@ function startTimer() {
         const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
         const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
         const s = (seconds % 60).toString().padStart(2, '0');
-        document.getElementById('timer').textContent = `${h}:${m}:${s}`;
+        const timer = document.getElementById('timer');
+        if (timer) timer.textContent = `${h}:${m}:${s}`;
     }, 1000);
 }
 
@@ -289,23 +443,50 @@ function startTimer() {
 function copyRoomId() {
     const id = document.getElementById('room-id').textContent;
     navigator.clipboard.writeText(id)
-        .then(() => alert('✅ Room ID copied to clipboard!'))
+        .then(() => alert('✅ Room ID copied!'))
         .catch(() => alert('❌ Failed to copy'));
 }
 
 function toggleMenu() {
     const menu = document.getElementById('dropdown-menu');
-    menu.classList.toggle('active');
+    if (menu) menu.classList.toggle('active');
 }
 
-function openWhiteboard() { 
-    alert('📝 Whiteboard feature coming soon!'); 
-    toggleMenu(); 
+// ============================================
+// WHITEBOARD & NOTES
+// ============================================
+function openWhiteboard() {
+    const notesPanel = document.getElementById('notes-panel');
+    if (notesPanel) notesPanel.classList.remove('active');
+    
+    const whiteboardPanel = document.getElementById('whiteboard-panel');
+    if (whiteboardPanel) {
+        whiteboardPanel.classList.add('active');
+        if (typeof initWhiteboard === 'function') initWhiteboard();
+    }
+    toggleMenu();
 }
 
-function openNotes() { 
-    alert('📄 Notes feature coming soon!'); 
-    toggleMenu(); 
+function closeWhiteboard() {
+    const whiteboardPanel = document.getElementById('whiteboard-panel');
+    if (whiteboardPanel) whiteboardPanel.classList.remove('active');
+}
+
+function openNotes() {
+    const whiteboardPanel = document.getElementById('whiteboard-panel');
+    if (whiteboardPanel) whiteboardPanel.classList.remove('active');
+    
+    const notesPanel = document.getElementById('notes-panel');
+    if (notesPanel) {
+        notesPanel.classList.add('active');
+        if (typeof initNotes === 'function') initNotes();
+    }
+    toggleMenu();
+}
+
+function closeNotes() {
+    const notesPanel = document.getElementById('notes-panel');
+    if (notesPanel) notesPanel.classList.remove('active');
 }
 
 function toggleChat() { 
@@ -314,24 +495,21 @@ function toggleChat() {
 }
 
 // ============================================
-// SEND MESSAGE TO BACKEND (FIXED!)
+// SEND MESSAGE
 // ============================================
 async function sendMessage() {
     const input = document.getElementById('message-input');
-    const message = input.value.trim();
+    if (!input) return;
     
+    const message = input.value.trim();
     if (!message) return;
     
-    // Add user message
     addMessage(message, 'user');
     input.value = '';
     
-    // Show typing indicator
     const typingDiv = showTypingIndicator();
     
     try {
-        console.log('📤 Sending message:', message);
-        
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: { 
@@ -344,44 +522,41 @@ async function sendMessage() {
             })
         });
         
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         
         const data = await response.json();
-        console.log('📥 Response received:', data);
-        
-        // Remove typing indicator
         typingDiv.remove();
         
         if (data.success) {
             addMessage(data.response, 'tutor');
-            speak(data.cleanedResponse || data.response);
+            speak(data.cleanedResponse || data.response, {
+                gender: data.voiceGender || currentTutor.voiceGender,
+                pitch: data.voicePitch || currentTutor.voicePitch,
+                rate: data.voiceRate || currentTutor.voiceRate
+            });
         } else {
-            addMessage('Sorry, I encountered an error. Please try again.', 'tutor');
+            addMessage('Sorry, I encountered an error.', 'tutor');
         }
     } catch (error) {
         console.error('❌ API Error:', error);
         typingDiv.remove();
-        addMessage(
-            'Connection error. Please check your internet connection and try again.', 
-            'tutor'
-        );
+        addMessage('Connection error. Please try again.', 'tutor');
     }
 }
 
 // ============================================
-// ADD MESSAGE TO CHAT
+// ADD MESSAGE
 // ============================================
 function addMessage(text, type) {
     const messagesDiv = document.getElementById('messages');
+    if (!messagesDiv) return;
+    
     const wrapper = document.createElement('div');
     wrapper.className = `message-wrapper ${type}`;
     
-    // Format text (preserve line breaks and bullet points)
     const formattedText = text
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-        .replace(/\n/g, '<br>'); // Line breaks
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
     
     if (type === 'user') {
         wrapper.innerHTML = `
@@ -420,171 +595,142 @@ function showTypingIndicator() {
 }
 
 // ============================================
-// TEXT-TO-SPEECH WITH ANIMATIONS
+// TEXT-TO-SPEECH
 // ============================================
-function speak(text) {
-    if (!('speechSynthesis' in window)) {
-        console.warn('⚠️ Text-to-speech not supported');
-        return;
-    }
+function speak(text, voiceSettings = {}) {
+    if (!('speechSynthesis' in window)) return;
     
-    // FORCE STOP any existing speech first
     if (currentUtterance || speechSynthesis.speaking) {
         speechSynthesis.cancel();
-        speechSynthesis.pause();
-        setTimeout(() => speechSynthesis.cancel(), 0);
     }
     
-    // Small delay to ensure previous speech is fully stopped
     setTimeout(() => {
         currentUtterance = new SpeechSynthesisUtterance(text);
-        currentUtterance.rate = 1.0;
-        currentUtterance.pitch = 1.0;
+        
+        const voices = speechSynthesis.getVoices();
+        const gender = voiceSettings.gender || 'male';
+        
+        let selectedVoice;
+        if (gender === 'female') {
+            selectedVoice = voices.find(v => 
+                v.name.includes('Female') || 
+                v.name.includes('Samantha')
+            );
+        } else {
+            selectedVoice = voices.find(v => 
+                v.name.includes('Male') || 
+                v.name.includes('Daniel')
+            );
+        }
+        
+        if (selectedVoice) currentUtterance.voice = selectedVoice;
+        
+        currentUtterance.rate = voiceSettings.rate || 1.0;
+        currentUtterance.pitch = voiceSettings.pitch || 1.0;
         currentUtterance.volume = 1.0;
         currentUtterance.lang = 'en-US';
         
-        // Show stop button
         const stopBtn = document.getElementById('stop-btn');
         if (stopBtn) stopBtn.classList.add('active');
         
-        // Start speaking animation
         currentUtterance.onstart = () => {
             isSpeaking = true;
-            console.log('🗣️ Avatar started speaking');
         };
         
-        // Stop speaking animation
         currentUtterance.onend = () => {
             isSpeaking = false;
             currentUtterance = null;
             if (stopBtn) stopBtn.classList.remove('active');
-            
-            // Close mouth
-            if (morphTargetInfluences && morphTargetInfluences.length > 0) {
-                morphTargetInfluences[0] = 0;
-            }
-            
-            console.log('✅ Avatar finished speaking');
         };
         
-        currentUtterance.onerror = (event) => {
-            console.error('❌ Speech error:', event.error);
+        currentUtterance.onerror = () => {
             isSpeaking = false;
             currentUtterance = null;
             if (stopBtn) stopBtn.classList.remove('active');
-            
-            // Close mouth
-            if (morphTargetInfluences && morphTargetInfluences.length > 0) {
-                morphTargetInfluences[0] = 0;
-            }
         };
         
-        // Start speaking
         speechSynthesis.speak(currentUtterance);
-        
-    }, 100); // 100ms delay ensures clean stop
+    }, 100);
 }
 
 // ============================================
-// STOP SPEAKING (INSTANT!)
+// STOP SPEAKING
 // ============================================
 function stopSpeaking() {
-    // FORCE STOP - Multiple methods for instant termination
-    if (speechSynthesis.speaking || speechSynthesis.pending) {
-        // Method 1: Cancel immediately
-        speechSynthesis.cancel();
-        
-        // Method 2: Pause first, then cancel (Chrome fix)
-        speechSynthesis.pause();
-        
-        // Method 3: Clear the queue completely
-        setTimeout(() => {
-            speechSynthesis.cancel();
-        }, 0);
-    }
-    
-    // Reset all states
+    if (speechSynthesis.speaking) speechSynthesis.cancel();
     isSpeaking = false;
     currentUtterance = null;
     
-    // Hide stop button
     const stopBtn = document.getElementById('stop-btn');
     if (stopBtn) stopBtn.classList.remove('active');
-    
-    // Close avatar mouth immediately
-    if (morphTargetInfluences && morphTargetInfluences.length > 0) {
-        morphTargetInfluences[0] = 0;
-    }
-    
-    console.log('🛑 Speech stopped INSTANTLY by user');
 }
 
 // ============================================
 // VOICE RECOGNITION
 // ============================================
 function setupVoiceRecognition() {
-    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-        console.warn('⚠️ Voice recognition not supported');
-        return;
-    }
+    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) return;
     
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    recognition.continuous = true;
+    recognition.interimResults = true;
     recognition.lang = 'en-US';
     
     recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        console.log('🎤 Voice input:', transcript);
-        document.getElementById('message-input').value = transcript;
-        sendMessage();
+        const lastResult = event.results[event.results.length - 1];
+        
+        if (lastResult.isFinal) {
+            const transcript = lastResult[0].transcript.trim();
+            
+            if (transcript.length > 0) {
+                const input = document.getElementById('message-input');
+                if (input) {
+                    input.value = transcript;
+                    input.style.color = 'white';
+                    sendMessage();
+                }
+            }
+        } else {
+            const transcript = lastResult[0].transcript;
+            const input = document.getElementById('message-input');
+            if (input && transcript.length > 0) {
+                input.value = transcript;
+                input.style.color = '#9ca3af';
+            }
+        }
     };
     
     recognition.onerror = (event) => {
-        console.error('❌ Voice recognition error:', event.error);
-        isListening = false;
-        const voiceBtn = document.getElementById('voice-btn');
-        if (voiceBtn) voiceBtn.classList.remove('active');
+        if (event.error !== 'aborted' && event.error !== 'no-speech') {
+            setTimeout(() => {
+                if (isContinuousListening) {
+                    try { recognition.start(); } catch (e) {}
+                }
+            }, 1000);
+        }
     };
     
     recognition.onend = () => {
-        isListening = false;
-        const voiceBtn = document.getElementById('voice-btn');
-        if (voiceBtn) voiceBtn.classList.remove('active');
-    };
-}
-
-function toggleVoice() {
-    if (!recognition) {
-        alert('⚠️ Voice recognition not supported in your browser');
-        return;
-    }
-    
-    const voiceBtn = document.getElementById('voice-btn');
-    
-    if (isListening) {
-        recognition.stop();
-        isListening = false;
-        if (voiceBtn) voiceBtn.classList.remove('active');
-        console.log('🎤 Voice input stopped');
-    } else {
-        try {
-            recognition.start();
-            isListening = true;
-            if (voiceBtn) voiceBtn.classList.add('active');
-            console.log('🎤 Voice input started');
-        } catch (error) {
-            console.error('❌ Voice start error:', error);
+        if (isContinuousListening) {
+            setTimeout(() => {
+                try { recognition.start(); } catch (e) {}
+            }, 500);
         }
+    };
+    
+    try {
+        recognition.start();
+        isListening = true;
+        console.log('🎤 Voice recognition started');
+    } catch (error) {
+        console.error('❌ Voice error:', error);
     }
 }
 
 // ============================================
-// SCREEN RECORDING
+// RECORDING
 // ============================================
-let mediaRecorder, recordedChunks = [], isRecording = false;
-
 function toggleRecording() {
     if (!isRecording) {
         startRecording();
@@ -595,34 +741,47 @@ function toggleRecording() {
 
 async function startRecording() {
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: true, 
-            audio: true 
+        displayStream = await navigator.mediaDevices.getDisplayMedia({
+            video: { width: 1920, height: 1080, frameRate: 30 },
+            audio: true
         });
         
-        mediaRecorder = new MediaRecorder(stream, {
-            mimeType: 'video/webm;codecs=vp9'
+        const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        destination = audioContext.createMediaStreamDestination();
+        
+        if (displayStream.getAudioTracks().length > 0) {
+            const screenAudio = audioContext.createMediaStreamSource(displayStream);
+            screenAudio.connect(destination);
+        }
+        
+        const micAudio = audioContext.createMediaStreamSource(micStream);
+        micAudio.connect(destination);
+        
+        const combinedStream = new MediaStream([
+            ...displayStream.getVideoTracks(),
+            ...destination.stream.getAudioTracks()
+        ]);
+        
+        mediaRecorder = new MediaRecorder(combinedStream, {
+            mimeType: 'video/webm;codecs=vp9,opus'
         });
+        
         recordedChunks = [];
         
         mediaRecorder.ondataavailable = (e) => {
-            if (e.data.size > 0) {
-                recordedChunks.push(e.data);
-            }
+            if (e.data.size > 0) recordedChunks.push(e.data);
         };
         
         mediaRecorder.onstop = () => {
             const blob = new Blob(recordedChunks, { type: 'video/webm' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.style.display = 'none';
             a.href = url;
-            a.download = `yolearn-session-${Date.now()}.webm`;
-            document.body.appendChild(a);
+            a.download = `yolearn-${Date.now()}.webm`;
             a.click();
-            document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            console.log('✅ Recording saved');
         };
         
         mediaRecorder.start();
@@ -630,25 +789,31 @@ async function startRecording() {
         
         const recordText = document.getElementById('record-text');
         const recordBtn = document.getElementById('record-btn');
-        if (recordText) recordText.textContent = 'Stop Recording';
+        if (recordText) recordText.textContent = 'Stop';
         if (recordBtn) recordBtn.classList.add('recording');
         
         console.log('🔴 Recording started');
     } catch (error) {
         console.error('❌ Recording error:', error);
-        alert('Could not start recording. Please allow camera and microphone access.');
+        alert('Recording failed');
     }
 }
 
 function stopRecording() {
     if (mediaRecorder && isRecording) {
         mediaRecorder.stop();
-        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        
+        if (displayStream) {
+            displayStream.getTracks().forEach(track => track.stop());
+        }
+        
+        if (audioContext) audioContext.close();
         
         isRecording = false;
+        
         const recordText = document.getElementById('record-text');
         const recordBtn = document.getElementById('record-btn');
-        if (recordText) recordText.textContent = 'Start Recording';
+        if (recordText) recordText.textContent = 'Record';
         if (recordBtn) recordBtn.classList.remove('recording');
         
         console.log('⏹️ Recording stopped');
@@ -659,24 +824,19 @@ function stopRecording() {
 // END SESSION
 // ============================================
 function endSession() {
-    if (confirm('Are you sure you want to end this learning session?')) {
-        // Stop any ongoing speech
-        if (speechSynthesis.speaking) {
-            speechSynthesis.cancel();
+    if (confirm('End learning session?')) {
+        if (speechSynthesis.speaking) speechSynthesis.cancel();
+        if (isRecording) stopRecording();
+        if (recognition) {
+            isContinuousListening = false;
+            recognition.stop();
         }
-        
-        // Stop any ongoing recording
-        if (isRecording) {
-            stopRecording();
-        }
-        
-        // Redirect to home
         window.location.href = 'index.html';
     }
 }
 
 // ============================================
-// CLOSE DROPDOWN MENU ON OUTSIDE CLICK
+// EVENT LISTENERS
 // ============================================
 document.addEventListener('click', (e) => {
     const menu = document.getElementById('dropdown-menu');
@@ -687,19 +847,9 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// ============================================
-// KEYBOARD SHORTCUTS
-// ============================================
 document.addEventListener('keydown', (e) => {
-    // Ctrl/Cmd + Enter to send message
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-        sendMessage();
-    }
-    
-    // Escape to stop speaking
-    if (e.key === 'Escape' && isSpeaking) {
-        stopSpeaking();
-    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') sendMessage();
+    if (e.key === 'Escape' && isSpeaking) stopSpeaking();
 });
 
-console.log('✅ All systems initialized! Ready to learn! 🎓');
+console.log('✅ YoLearn.ai v5.1 ready! 🎓');

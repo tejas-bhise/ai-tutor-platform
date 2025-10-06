@@ -1,6 +1,6 @@
 /**
- * YoLearn.ai Backend Server - Production Ready v2.0
- * Fixed for Render Deployment
+ * YoLearn.ai Backend Server v3.0 - Production Ready
+ * Features: Different avatars, voices, gestures for each tutor
  */
 
 // Load environment variables FIRST
@@ -20,7 +20,7 @@ console.log('🔍 Environment Check:');
 console.log('   GEMINI_API_KEY length:', GEMINI_API_KEY ? GEMINI_API_KEY.length : 0);
 console.log('   First 10 chars:', GEMINI_API_KEY ? GEMINI_API_KEY.substring(0, 10) + '...' : 'NOT SET');
 
-// AI Companions Database - 5 Specialized Tutors
+// ✅ AI Companions Database - 5 UNIQUE Tutors with DIFFERENT Avatars
 const AI_COMPANIONS = {
     'alex': {
         id: 'alex',
@@ -29,8 +29,11 @@ const AI_COMPANIONS = {
         description: 'Expert in Advanced Mathematics, Calculus, Statistics, and Physics',
         avatar: '👨‍🏫',
         emoji: '📐',
+        // ✅ UNIQUE MALE AVATAR for Alex
         avatarUrl: 'https://models.readyplayer.me/68e3549ab7446b1aad116ab5.glb',
-        voiceId: 'en-US-Neural2-D',
+        voiceGender: 'male',
+        voicePitch: 1.0,
+        voiceRate: 1.0,
         subjects: ['Mathematics', 'Calculus', 'Statistics', 'Physics', 'Algebra'],
         personality: 'analytical, patient, methodical',
         bio: 'I help students master mathematical concepts from basic algebra to advanced calculus, with clear step-by-step explanations.',
@@ -47,8 +50,11 @@ const AI_COMPANIONS = {
         description: 'Software Development Expert specializing in Python, JavaScript, Web Dev & Algorithms',
         avatar: '👩‍💻',
         emoji: '💻',
-        avatarUrl: 'https://models.readyplayer.me/68e3549ab7446b1aad116ab5.glb',
-        voiceId: 'en-US-Neural2-F',
+        // ✅ UNIQUE FEMALE AVATAR for Sophia - YOU NEED TO PROVIDE THIS URL
+        avatarUrl: 'https://models.readyplayer.me/68e3ce04982057165ce5f3cd.glb', // Replace with Sophia's URL
+        voiceGender: 'female',
+        voicePitch: 1.2,
+        voiceRate: 1.05,
         subjects: ['Python', 'JavaScript', 'Web Development', 'Data Structures', 'Algorithms'],
         personality: 'practical, encouraging, detail-oriented',
         bio: 'I teach coding from fundamentals to advanced concepts, helping students become confident developers.',
@@ -65,8 +71,11 @@ const AI_COMPANIONS = {
         description: 'Machine Learning & Data Analytics Expert with Python, TensorFlow & Statistics',
         avatar: '👩‍🔬',
         emoji: '📊',
-        avatarUrl: 'https://models.readyplayer.me/68e3549ab7446b1aad116ab5.glb',
-        voiceId: 'en-US-Neural2-G',
+        // ✅ UNIQUE FEMALE AVATAR for Maya - YOU NEED TO PROVIDE THIS URL
+        avatarUrl: 'https://models.readyplayer.me/68e3cfea9f7e763dcec949f5.glb', // Replace with Maya's URL
+        voiceGender: 'female',
+        voicePitch: 1.1,
+        voiceRate: 0.95,
         subjects: ['Machine Learning', 'Data Science', 'Python', 'Statistics', 'AI'],
         personality: 'innovative, insightful, research-focused',
         bio: 'I guide students through the exciting world of data science, machine learning, and artificial intelligence.',
@@ -83,8 +92,11 @@ const AI_COMPANIONS = {
         description: 'Mechanical, Electrical & Civil Engineering Expert with CAD and System Design',
         avatar: '👨‍🔧',
         emoji: '⚙️',
-        avatarUrl: 'https://models.readyplayer.me/68e3549ab7446b1aad116ab5.glb',
-        voiceId: 'en-US-Neural2-J',
+        // ✅ UNIQUE MALE AVATAR for Ryan - YOU NEED TO PROVIDE THIS URL
+        avatarUrl: 'https://models.readyplayer.me/68e3cef58074ade6a7acd194.glb', // Replace with Ryan's URL
+        voiceGender: 'male',
+        voicePitch: 0.9,
+        voiceRate: 1.0,
         subjects: ['Mechanical Engineering', 'Electrical Engineering', 'CAD', 'Thermodynamics', 'Circuits'],
         personality: 'practical, systematic, problem-solver',
         bio: 'I help engineering students understand complex systems, design principles, and real-world applications.',
@@ -101,8 +113,11 @@ const AI_COMPANIONS = {
         description: 'Finance, Economics, Accounting & Business Strategy Expert',
         avatar: '👩‍💼',
         emoji: '📈',
-        avatarUrl: 'https://models.readyplayer.me/68e3549ab7446b1aad116ab5.glb',
-        voiceId: 'en-US-Neural2-H',
+        // ✅ UNIQUE FEMALE AVATAR for Emma - YOU NEED TO PROVIDE THIS URL
+        avatarUrl: 'https://models.readyplayer.me/68e3d8ed31d1fe24d0b4b47c.glb', // Replace with Emma's URL
+        voiceGender: 'female',
+        voicePitch: 1.15,
+        voiceRate: 1.0,
         subjects: ['Economics', 'Finance', 'Accounting', 'Business', 'Marketing'],
         personality: 'strategic, articulate, results-driven',
         bio: 'I teach business fundamentals, economic principles, and financial literacy for career success.',
@@ -134,7 +149,7 @@ app.get('/', (req, res) => {
         success: true,
         status: 'online',
         message: '🎓 YoLearn.ai Backend is running!',
-        version: '2.0.0',
+        version: '3.0.0',
         timestamp: new Date().toISOString(),
         endpoints: {
             health: '/api/health',
@@ -276,6 +291,10 @@ app.post('/api/video/rooms', (req, res) => {
             userId: userId || 'anonymous',
             companionId: companionId,
             companionName: companion.name,
+            avatarUrl: companion.avatarUrl, // ✅ Return avatar URL
+            voiceGender: companion.voiceGender, // ✅ Return voice config
+            voicePitch: companion.voicePitch,
+            voiceRate: companion.voiceRate,
             createdAt: new Date().toISOString(),
             status: 'active',
             features: {
@@ -436,6 +455,9 @@ Respond to the student's question following these guidelines.`;
             cleanedResponse: cleanedResponse,
             tutor: tutor.name,
             specialty: tutor.specialty,
+            voiceGender: tutor.voiceGender, // ✅ Send voice config
+            voicePitch: tutor.voicePitch,
+            voiceRate: tutor.voiceRate,
             audio_url: null,
             timestamp: new Date().toISOString()
         });
@@ -596,7 +618,7 @@ app.use((error, req, res, next) => {
  */
 app.listen(PORT, '0.0.0.0', () => {
     console.log('\n============================================================');
-    console.log('🚀 YoLearn.ai Backend Server v2.0 Started!');
+    console.log('🚀 YoLearn.ai Backend Server v3.0 Started!');
     console.log('============================================================');
     console.log(`📡 Port: ${PORT}`);
     console.log(`🔑 API Key: ${GEMINI_API_KEY ? '✅ Configured' : '❌ Missing'}`);
@@ -604,7 +626,7 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`⏰ Time: ${new Date().toLocaleString()}`);
     console.log('\n📚 Available Tutors:');
     Object.values(AI_COMPANIONS).forEach(tutor => {
-        console.log(`   ${tutor.emoji} ${tutor.name} - ${tutor.specialty}`);
+        console.log(`   ${tutor.emoji} ${tutor.name} - ${tutor.specialty} (${tutor.voiceGender})`);
     });
     console.log('============================================================\n');
 });
