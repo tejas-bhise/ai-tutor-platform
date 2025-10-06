@@ -5,7 +5,9 @@
  */
 
 const AVATAR_URL = 'https://models.readyplayer.me/68e3549ab7446b1aad116ab5.glb';
-const API_URL = 'http://localhost:5000';
+const API_URL = isDevelopment 
+    ? 'http://localhost:5000/api/chat'  // Local development
+    : 'https://ai-tutor-platform-7vte.onrender.com/api/chat';  // Production
 
 // Global variables
 let scene, camera, renderer, avatar, mixer, clock;
